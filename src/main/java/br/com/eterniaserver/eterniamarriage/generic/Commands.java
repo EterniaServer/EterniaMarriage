@@ -62,48 +62,36 @@ public class Commands extends BaseCommand {
     @CommandCompletion("@players @players")
     @CommandPermission("eternia.priest")
     public void onMarry(Player player, OnlinePlayer marryOne, OnlinePlayer marryTwo) {
-        final Player pMarryOne = marryOne.getPlayer();
-        final Player pMarryTwo = marryTwo.getPlayer();
-        final String marryOneN = pMarryOne.getName();
-        final String marryTwoN = pMarryTwo.getName();
-        if (pMarryOne == pMarryTwo) {
+        final Player wife = marryOne.getPlayer();
+        final Player husband = marryTwo.getPlayer();
+
+        final String wifeName = wife.getName();
+        final String husbandName = husband.getName();
+
+        if (wifeName.equals(husbandName)) {
             messages.sendMessage("server.yourself", player);
             return;
         }
-        if (APIMarry.isMarried(marryOneN) || APIMarry.isMarried(marryTwoN)) {
+        if (APIMarry.isMarried(wifeName) || APIMarry.isMarried(husbandName)) {
             messages.sendMessage("marry.already-married", player);
             return;
         }
-        if ((Vars.proMarry.containsKey(marryOneN) && Vars.proMarry.get(marryOneN).equals(marryTwoN)) &&
-                (Vars.proMarry.containsKey(marryTwoN) && Vars.proMarry.get(marryTwoN).equals(marryOneN))) {
+        if ((Vars.proMarry.containsKey(wifeName) || Vars.proMarry.containsKey(husbandName))) {
             messages.sendMessage("marry.already-sent", player);
             return;
         }
-        if (Vars.resMarry.get(marryOneN) && Vars.resMarry.get(marryTwoN)) {
-            Vars.resMarry.remove(marryOneN);
-            Vars.resMarry.remove(marryTwoN);
-            Vars.proMarry.remove(marryOneN);
-            Vars.proMarry.remove(marryTwoN);
-            messages.broadcastMessage("marry.sucess", Constants.PLAYER.get(), player.getDisplayName(), Constants.TARGET.get(), pMarryOne.getDisplayName(), "%target2_displayname%", pMarryTwo.getDisplayName());
-            marrySucess(marryOneN, marryTwoN);
-            return;
-        }
-        if (!Vars.proMarry.containsKey(marryOneN) && !Vars.proMarry.containsKey(marryTwoN)) {
-            messages.broadcastMessage("marry.advice", Constants.PLAYER.get(), pMarryOne.getDisplayName(), Constants.TARGET.get(), pMarryTwo.getDisplayName());
-            sendMarry(pMarryOne, pMarryTwo, marryOneN);
-            sendMarry(pMarryTwo, pMarryOne, marryTwoN);
-        } else {
-            messages.sendMessage("marry.already-proposal", player);
-        }
+        messages.broadcastMessage("marry.advice", Constants.PLAYER.get(), wife.getDisplayName(), Constants.TARGET.get(), husband.getDisplayName());
+        sendMarry(wife, husband, wifeName);
+        sendMarry(husband, wife, husbandName);
     }
 
     @CommandAlias("divorciar|divorce")
     @Syntax("<jogador(a)> <jogador(a)>")
     @CommandCompletion("@players @players")
     @CommandPermission("eternia.priest")
-    public void onDivorce(Player player, String marryOne, String marryTwo) {
-        if (Vars.marry.get(marryOne).equals(marryTwo) && Vars.marry.get(marryTwo).equals(marryOne)) {
-            marryDeny(marryOne, marryTwo);
+    public void onDivorce(Player player, String wifeName, String husbandName) {
+        if (Vars.marry.get(wifeName).equals(husbandName) && Vars.marry.get(husbandName).equals(wifeName)) {
+            marryDeny(wifeName, husbandName);
         } else {
             messages.sendMessage("marry.no-marry", player);
         }
@@ -111,25 +99,36 @@ public class Commands extends BaseCommand {
 
     @Subcommand("accept|aceitar")
     public void onAccept(Player player) {
-        final String name = player.getName();
-        if (Vars.proMarry.containsValue(name)) {
-            Vars.resMarry.put(name, true);
-            Vars.proMarry.remove(name);
-            messages.broadcastMessage("marry.accept", Constants.PLAYER.get(), player.getDisplayName());
-        } else {
+        final String wifeName = player.getName();
+
+        if (Vars.proMarry.containsValue(wifeName)) {
+            final String husbandName = Vars.proMarry.get(wifeName);
+            if (Vars.resMarry.get(husbandName)) {
+                messages.broadcastMessage("marry.sucess", Constants.TARGET.get(), husbandName, "%target2_displayname%", player.getName());
+                marrySucess(wifeName, husbandName);
+                Vars.resMarry.remove(wifeName);
+                Vars.resMarry.remove(husbandName);
+                Vars.proMarry.remove(wifeName);
+                Vars.proMarry.remove(husbandName);
+            } else {
+                Vars.resMarry.put(wifeName, true);
+                messages.broadcastMessage("marry.accept", Constants.PLAYER.get(), player.getDisplayName());
+            }
+        }else {
             messages.sendMessage("marry.no-proposal", player);
         }
     }
 
     @Subcommand("deny|negar")
     public void onDeny(Player player) {
-        final String name = player.getName();
-        if (Vars.proMarry.containsValue(name)) {
-            final String targetName = Vars.proMarry.get(name);
-            Vars.resMarry.remove(targetName);
-            Vars.proMarry.remove(targetName);
-            Vars.resMarry.remove(name);
-            Vars.proMarry.remove(name);
+        final String wifeName = player.getName();
+
+        if (Vars.proMarry.containsValue(wifeName)) {
+            final String husbandName = Vars.proMarry.get(wifeName);
+            Vars.resMarry.remove(husbandName);
+            Vars.proMarry.remove(husbandName);
+            Vars.resMarry.remove(wifeName);
+            Vars.proMarry.remove(wifeName);
             messages.broadcastMessage("marry.deny", Constants.PLAYER.get(), player.getDisplayName());
         } else {
             messages.sendMessage("marry.no-proposal", player);

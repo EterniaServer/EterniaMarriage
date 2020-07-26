@@ -97,9 +97,8 @@
       <url>https://jitpack.io</url>
     </repository>
     <repository>
-      <id>DataLocal</id>
-      <name>data</name>
-      <url>file:///C:/jars/</url>
+      <id>mcMMO</id>
+      <url>https://repo.codemc.org/repository/maven-public/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -116,9 +115,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>br.com.eterniaserver</groupId>
+      <groupId>com.gmail.nossr50.mcMMO</groupId>
       <artifactId>mcMMO</artifactId>
-      <version>2.0</version>
+      <version>2.1.107</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -130,7 +129,11 @@
   </dependencies>
   <properties>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <sonar.projectKey>yurinogueira_EterniaMarriage</sonar.projectKey>
     <maven.compiler.source>1.8</maven.compiler.source>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <sonar.login>fdaf921419bb4c3defb5a616d468fad6e23d0195</sonar.login>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <sonar.organization>yurinogueira</sonar.organization>
   </properties>
 </project>

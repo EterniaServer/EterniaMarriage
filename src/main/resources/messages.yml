@@ -14,13 +14,13 @@ server:
   yourself: '&7Você não pode se casar uma pessoa com ela mesma&8.'
 marry:
   already-proposal: '&7Um dos jogadores já tem um pedido de casamento&8, &7rejeite-o antes de fazer um novo pedido&8.'
-  already-sent: '&7A cerimônia já foi feita&8, &7resta agora esperar eles aceitarem&8.'
+  already-sent: '&7Esse jogador já tem um pedido de casamento em andamento&8.'
   send-proposal: '&7Você, &3%player_displayname%&8, &7aceita se casar com &3%target_displayname%&8.'
   advice: '&3%player_displayname% &7e &3%target_displayname% &7estão se casando&8, &7será que a cerimônia será realizada&8?!'
   accept: '&3%player_displayname% &7aceitou&8!'
   deny: '&7Que triste&8... &3%player_displayname% &7negou o pedido&8.'
   no-proposal: '&7Nenhum pedido foi feito a você&8.'
-  sucess: '&7O padre &3%player_displayname% &7declara &3%target_displayname% &7e &3%target2_displayname%&7 casados&8!'
+  sucess: '&3%target_displayname% &7e &3%target2_displayname%&7 acabaram de se casar&8!'
   no-marry: '&7Esses jogadores(as) não são casados(as)&8.'
   already-married: '&7Um dos jogadores já é casado&8.'
 commands:

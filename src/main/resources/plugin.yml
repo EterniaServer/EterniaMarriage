@@ -1,8 +1,0 @@
-main: br.com.eterniaserver.eterniamarriage.EterniaMarriage
-
-name: EterniaMarriage
-version: '${project.version}'
-author: Yuri Nogueira
-description: Casamentu
-api-version: '1.13'
-softdepend: [EterniaLib, Vault]

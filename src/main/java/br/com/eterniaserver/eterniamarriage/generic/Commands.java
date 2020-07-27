@@ -1,21 +1,18 @@
 package br.com.eterniaserver.eterniamarriage.generic;
 
+import br.com.eterniaserver.acf.BaseCommand;
+import br.com.eterniaserver.acf.annotation.*;
+import br.com.eterniaserver.acf.bukkit.contexts.OnlinePlayer;
 import br.com.eterniaserver.eternialib.EFiles;
 import br.com.eterniaserver.eternialib.EQueries;
 import br.com.eterniaserver.eterniamarriage.Constants;
 import br.com.eterniaserver.eterniamarriage.EterniaMarriage;
 
-import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.*;
-import co.aikar.commands.bukkit.contexts.OnlinePlayer;
-
-import io.papermc.lib.PaperLib;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -226,7 +223,7 @@ public class Commands extends BaseCommand {
     public void onHome(Player player) {
         final String marryName = APIMarry.getMarriedBankName(player.getName());
         if (Vars.marryLocation.get(marryName) != error) {
-            PaperLib.teleportAsync(player, Vars.marryLocation.get(marryName), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            Vars.teleports.put(player, new PlayerTeleport(player, Vars.marryLocation.get(marryName), "server.timing"));
             messages.sendMessage("commands.home", player);
         } else {
             messages.sendMessage("commands.no-home", player);

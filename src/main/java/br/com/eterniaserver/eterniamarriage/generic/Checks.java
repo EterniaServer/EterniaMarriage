@@ -2,7 +2,8 @@ package br.com.eterniaserver.eterniamarriage.generic;
 
 import br.com.eterniaserver.eternialib.EFiles;
 import br.com.eterniaserver.eterniamarriage.EterniaMarriage;
-import io.papermc.lib.PaperLib;
+import br.com.eterniaserver.paperlib.PaperLib;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

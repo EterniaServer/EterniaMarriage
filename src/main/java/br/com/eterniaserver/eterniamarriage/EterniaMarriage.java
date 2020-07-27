@@ -35,7 +35,7 @@ public class EterniaMarriage extends JavaPlugin {
         manager.registerCommand(new Commands(this));
 
         this.getServer().getPluginManager().registerEvents(new OnMcMMOPlayerXpGain(), this);
-        this.getServer().getScheduler().runTaskTimer(this, new Checks(), 0L, 100L);
+        this.getServer().getScheduler().runTaskTimer(this, new Checks(this), 0L, 100L);
 
     }
 

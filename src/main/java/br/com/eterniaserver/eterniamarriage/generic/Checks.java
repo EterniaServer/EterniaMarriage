@@ -1,9 +1,18 @@
 package br.com.eterniaserver.eterniamarriage.generic;
 
+import br.com.eterniaserver.eternialib.EFiles;
+import br.com.eterniaserver.eterniamarriage.EterniaMarriage;
+import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class Checks implements Runnable {
+
+    private final EFiles messages;
+
+    public Checks(EterniaMarriage plugin) {
+        this.messages = plugin.getEFiles();
+    }
 
     @Override
     public void run() {
@@ -33,6 +42,31 @@ public class Checks implements Runnable {
             }
         }
 
+    }
+
+    private void getPlayersInTp(final Player player) {
+        if (Vars.teleports.containsKey(player)) {
+            final PlayerTeleport playerTeleport = Vars.teleports.get(player);
+            if (!player.hasPermission("eternia.timing.bypass")) {
+                if (!playerTeleport.hasMoved()) {
+                    if (playerTeleport.getCountdown() == 0) {
+                        PaperLib.teleportAsync(player, playerTeleport.getWantLocation());
+                        messages.sendMessage(playerTeleport.getMessage(), player);
+                        Vars.teleports.remove(player);
+                    } else {
+                        messages.sendMessage("server.timing", "%cooldown%", playerTeleport.getCountdown(), player);
+                        playerTeleport.decreaseCountdown();
+                    }
+                } else {
+                    messages.sendMessage("server.move", player);
+                    Vars.teleports.remove(player);
+                }
+            } else {
+                PaperLib.teleportAsync(player, playerTeleport.getWantLocation());
+                messages.sendMessage(playerTeleport.getMessage(), player);
+                Vars.teleports.remove(player);
+            }
+        }
     }
 
 }

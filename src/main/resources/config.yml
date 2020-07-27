@@ -9,3 +9,10 @@
 sql:
   table-marry: 'es_marry'
   table-bank: 'es_marryBank'
+
+server:
+  cooldown: 4
+
+money:
+  marry: 500000
+  sethome: 5000

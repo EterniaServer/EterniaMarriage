@@ -14,5 +14,5 @@ server:
   cooldown: 4
 
 money:
-  marry: 500000
+  marry: 2000000
   sethome: 5000

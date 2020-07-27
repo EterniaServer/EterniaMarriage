@@ -5,4 +5,4 @@ version: '${project.version}'
 author: Yuri Nogueira
 description: Casamentu
 api-version: '1.13'
-softdepend: [EterniaLib, Vault]
+depend: [EterniaLib, Vault, PlaceholderAPI]

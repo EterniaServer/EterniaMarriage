@@ -29,6 +29,10 @@
             <configuration>
               <relocations>
                 <relocation>
+                  <pattern>io.papermc.lib</pattern>
+                  <shadedPattern>br.com.eterniaserver.eterniaserver.paperlib</shadedPattern>
+                </relocation>
+                <relocation>
                   <pattern>co.aikar.commands</pattern>
                   <shadedPattern>br.com.eterniaserver.eterniamarriage.acf</shadedPattern>
                 </relocation>
@@ -100,6 +104,10 @@
       <id>mcMMO</id>
       <url>https://repo.codemc.org/repository/maven-public/</url>
     </repository>
+    <repository>
+      <id>placeholderapi</id>
+      <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -124,6 +132,12 @@
       <groupId>com.github.MilkBowl</groupId>
       <artifactId>VaultAPI</artifactId>
       <version>1.7</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>me.clip</groupId>
+      <artifactId>placeholderapi</artifactId>
+      <version>2.10.6</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

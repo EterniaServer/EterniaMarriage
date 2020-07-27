@@ -10,6 +10,7 @@ import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 
 import io.papermc.lib.PaperLib;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 @CommandPermission("eternia.marry")
 public class Commands extends BaseCommand {
 
+    private final Economy economy;
     private final EterniaMarriage plugin;
     private final ItemStack air = new ItemStack(Material.AIR);
     private final EFiles messages;
@@ -31,6 +33,7 @@ public class Commands extends BaseCommand {
     public Commands(EterniaMarriage plugin) {
         this.plugin = plugin;
         this.messages = plugin.getEFiles();
+        this.economy = plugin.getEcon();
         error = new Location(Bukkit.getWorld("world"), 666, 666, 666, 666, 666);
 
         String query = "SELECT * FROM " + EterniaMarriage.serverConfig.getString("sql.table-marry") + ";";
@@ -75,7 +78,7 @@ public class Commands extends BaseCommand {
         final String husbandName = husband.getName();
         final double money = EterniaMarriage.serverConfig.getDouble("money.marry");
 
-        if (!EterniaMarriage.econ.has(player, money)) {
+        if (!economy.has(player, money)) {
             messages.sendMessage("server.no-balance", "%money%", money, player);
             return;
         }
@@ -93,7 +96,7 @@ public class Commands extends BaseCommand {
             return;
         }
 
-        EterniaMarriage.econ.withdrawPlayer(player, money);
+        economy.withdrawPlayer(player, money);
         messages.broadcastMessage("marry.advice", Constants.PLAYER.get(), wife.getDisplayName(), Constants.TARGET.get(), husband.getDisplayName());
         sendMarry(wife, husband, wifeName);
         sendMarry(husband, wife, husbandName);
@@ -165,8 +168,8 @@ public class Commands extends BaseCommand {
         final String marryBank = APIMarry.getMarriedBankName(playerName);
         if (!marryBank.equals("")) {
             if (amount > 0) {
-                if (EterniaMarriage.econ.has(playerName, amount)) {
-                    EterniaMarriage.econ.withdrawPlayer(playerName, amount);
+                if (economy.has(player, amount)) {
+                    economy.withdrawPlayer(player, amount);
                     APIMarry.giveMarryBankMoney(marryBank, amount);
                     messages.sendMessage("commands.deposit", Constants.AMOUNT.get(), amount, player);
                 } else {
@@ -206,7 +209,7 @@ public class Commands extends BaseCommand {
         if (!marryBank.equals("")) {
             if (amount > 0) {
                 if (Vars.marryBank.get(marryBank) >= amount) {
-                    EterniaMarriage.econ.depositPlayer(playerName, amount);
+                    economy.depositPlayer(player, amount);
                     APIMarry.removeMarryBankMoney(marryBank, amount);
                 } else {
                     messages.sendMessage("commands.no-money", "%money%", amount, player);

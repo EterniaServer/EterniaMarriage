@@ -3,7 +3,6 @@ package br.com.eterniaserver.eterniamarriage.dependencies.eternialib;
 import br.com.eterniaserver.eternialib.EQueries;
 import br.com.eterniaserver.eternialib.EterniaLib;
 import br.com.eterniaserver.eterniamarriage.Constants;
-import br.com.eterniaserver.eterniamarriage.EterniaMarriage;
 
 public class Table {
 

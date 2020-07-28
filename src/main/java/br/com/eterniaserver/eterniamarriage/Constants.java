@@ -32,14 +32,13 @@ public class Constants {
         return "UPDATE " + table + " SET " + type + "='" + value + "' WHERE " + type2 + "='" + value2 + "';";
     }
 
-    public static String getQueryInsert(final String table, final String type, final Object value, final String type2, final Object value2) {
-        return "INSERT INTO " + table + " (" + type + ", " + type2 + ") VALUES ('" + value + "', '" + value2 + "');";
+    public static String getQueryInsert(final String table, final String type, final Object value) {
+        return "INSERT INTO " + table + " (" + type + ") VALUES ("
+                + value + ");";
     }
 
-    public static String getQueryInsert(final String table, final String type, final Object value, final String type2, final Object value2,
-                                        final String type3, final Object value3, final String type4, final Object value4) {
-        return "INSERT INTO " + table + " (" + type + ", " + type2 + ", " + type3 + ", " + type4 + ") VALUES ('"
-                + value + "', '" + value2 + "', '" + value3 + "','" + value4 + "');";
+    public static String getQueryInsert(final String table, final String type, final Object value, final String type2, final Object value2) {
+        return "INSERT INTO " + table + " (" + type + ", " + type2 + ") VALUES ('" + value + "', '" + value2 + "');";
     }
 
 }

@@ -75,7 +75,9 @@ public class EterniaMarriage extends JavaPlugin {
     public void vault() {
         if (Bukkit.getServer().getPluginManager().getPlugin("Vault") != null) {
             RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-            econ = rsp.getProvider();
+            if (rsp != null) {
+                econ = rsp.getProvider();
+            }
         }
     }
 

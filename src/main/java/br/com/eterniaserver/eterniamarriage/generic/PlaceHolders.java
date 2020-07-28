@@ -64,11 +64,15 @@ public class PlaceHolders extends PlaceholderExpansion {
                 if (APIMarry.isMarried(playerName)) return "&c❤";
                 else return "";
             case 4:
-                if (APIMarry.isMarried(playerName)) return df2.format(APIMarry.getMarryBankMoney(APIMarry.getMarriedBankName(playerName)));
+                if (APIMarry.isMarried(playerName)) return getMoney(playerName);
                 else return "";
              default:
                  return null;
         }
+    }
+
+    private String getMoney(final String playerName) {
+        return df2.format(APIMarry.getMarryBankMoney(APIMarry.getMarriedBankName(playerName)));
     }
 
 }

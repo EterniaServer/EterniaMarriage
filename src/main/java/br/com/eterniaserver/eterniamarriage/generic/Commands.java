@@ -124,7 +124,7 @@ public class Commands extends BaseCommand {
         final String wifeName = player.getName();
         if (Vars.proMarry.containsValue(wifeName)) {
             final String husbandName = Vars.proMarry.get(wifeName);
-            if (Vars.resMarry.get(husbandName)) {
+            if (Boolean.TRUE.equals(Vars.resMarry.get(husbandName))) {
                 messages.broadcastMessage(Strings.M_MARRY_SUCESS, Constants.TARGET, husbandName, Constants.PLAYER, player.getName());
                 marrySucess(wifeName, husbandName);
                 Vars.resMarry.remove(wifeName);
@@ -263,8 +263,9 @@ public class Commands extends BaseCommand {
     private void marrySucess(String nameOne, String nameTwo) {
         EQueries.executeQuery(Constants.getQueryInsert(Constants.TABLE_MARRY, Strings.PNAME, nameOne, Strings.MARRY_NAME, nameTwo));
         EQueries.executeQuery(Constants.getQueryInsert(Constants.TABLE_MARRY, Strings.PNAME, nameTwo, Strings.MARRY_NAME, nameOne));
-        EQueries.executeQuery(Constants.getQueryInsert(Constants.TABLE_BANK, Strings.MARRY_BANK, nameOne + nameTwo,
-                Strings.BALANCE, 0, Strings.MARRY_TIME, 0, Strings.LOC, "world:666:666:666:666:666"));
+
+        EQueries.executeQuery(Constants.getQueryInsert(Constants.TABLE_BANK, Strings.MARRY_BANK + ", " + Strings.BALANCE +
+                ", " + Strings.MARRY_TIME + ", " + Strings.LOC, "'" + nameOne + nameTwo + "', '" + 0 + "', '" + 0 + "', 'world:666:666:666:666:666'"));
         Vars.marry.put(nameOne, nameTwo);
         Vars.marry.put(nameTwo, nameOne);
     }

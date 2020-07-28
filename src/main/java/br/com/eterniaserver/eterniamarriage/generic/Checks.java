@@ -30,6 +30,7 @@ public class Checks implements Runnable {
                     Vars.saveTime.remove(marryName);
                 }
             }
+            getPlayersInTp(player);
         }
     }
 

@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Checks" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Checks" method="Checks" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="Commands" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.EterniaMarriage" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.dependencies.eternialib.Files" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.dependencies.eternialib.Files" method="Files" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.MarryTime" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.OnMcMMOPlayerXpGain" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.PlaceHolders" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onAccept" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onDeny" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onDeposit" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onDivorce" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.OnMcMMOPlayerXpGain" method="onGainXp" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onGiveItem" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onHome" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onMarry" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onReload" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onSetHome" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onWithdraw" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.dependencies.papi.PAPI" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.dependencies.papi.PAPI" method="PAPI" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.PlayerTeleport" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.PlayerTeleport" method="PlayerTeleport" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.dependencies.eternialib.Table" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.dependencies.eternialib.Table" method="Table" />
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">
     <option name="originalFiles">

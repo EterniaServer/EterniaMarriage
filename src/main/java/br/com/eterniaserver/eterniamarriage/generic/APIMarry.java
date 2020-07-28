@@ -1,8 +1,10 @@
 package br.com.eterniaserver.eterniamarriage.generic;
 
 import br.com.eterniaserver.eternialib.EQueries;
+import br.com.eterniaserver.eterniamarriage.Constants;
 import br.com.eterniaserver.eterniamarriage.EterniaMarriage;
 
+import br.com.eterniaserver.eterniamarriage.Strings;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -51,7 +53,7 @@ public class APIMarry {
     public static void setMarryBankMoney(String bankName, Double amount) {
         if (Vars.marryBank.containsKey(bankName)) {
             Vars.marryBank.put(bankName, amount);
-            EQueries.executeQuery("UPDATE " + EterniaMarriage.serverConfig.getString("sql.table-bank") + " SET balance='" + amount + "' WHERE marry_bank='" + bankName + "';");
+            EQueries.executeQuery(Constants.getQueryUpdate(Constants.TABLE_BANK, Strings.BALANCE, amount, Strings.MARRY_BANK, bankName));
         }
     }
 

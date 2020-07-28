@@ -8,6 +8,7 @@ import br.com.eterniaserver.eternialib.EQueries;
 import br.com.eterniaserver.eterniamarriage.Constants;
 import br.com.eterniaserver.eterniamarriage.EterniaMarriage;
 
+import br.com.eterniaserver.eterniamarriage.Strings;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -28,28 +29,26 @@ public class Commands extends BaseCommand {
     private final Location error;
 
     public Commands(EterniaMarriage plugin) {
+        error = new Location(Bukkit.getWorld("world"), 666, 666, 666, 666, 666);
         this.plugin = plugin;
         this.messages = plugin.getEFiles();
         this.economy = plugin.getEcon();
-        error = new Location(Bukkit.getWorld("world"), 666, 666, 666, 666, 666);
 
-        String query = "SELECT * FROM " + EterniaMarriage.serverConfig.getString("sql.table-marry") + ";";
-        HashMap<String, String> temp = EQueries.getMapString(query, "player_name", "marry_name");
+        HashMap<String, String> temp = EQueries.getMapString(Constants.getQuerySelectAll(Constants.TABLE_MARRY), Strings.PNAME, Strings.MARRY_NAME);
         temp.forEach(Vars.marry::put);
-        messages.sendConsole("server.loaded", Constants.MODULE.get(), "Married", Constants.AMOUNT.get(), temp.size() / 2);
+        messages.sendConsole(Strings.M_SERVER_LOAD, Constants.MODULE, "Married", Constants.AMOUNT, temp.size() / 2);
 
-        query = "SELECT * FROM " + EterniaMarriage.serverConfig.getString("sql.table-bank") + ";";
-
-        temp = EQueries.getMapString(query, "marry_bank", "balance");
+        final String query = Constants.getQuerySelectAll(Constants.TABLE_BANK);
+        temp = EQueries.getMapString(query, Strings.MARRY_BANK, Strings.BALANCE);
         temp.forEach((k, v) -> Vars.marryBank.put(k, Double.parseDouble(v)));
         final int sized = temp.size();
-        messages.sendConsole("server.loaded", Constants.MODULE.get(), "MarryMoney", Constants.AMOUNT.get(), sized);
+        messages.sendConsole(Strings.M_SERVER_LOAD, Constants.MODULE, "Marry Money", Constants.AMOUNT, sized);
 
-        temp = EQueries.getMapString(query, "marry_bank", "marry_time");
+        temp = EQueries.getMapString(query, Strings.MARRY_BANK, Strings.MARRY_TIME);
         temp.forEach((k, v) -> Vars.marryTime.put(k, Long.parseLong(v)));
-        messages.sendConsole("server.loaded", Constants.MODULE.get(), "MarryTime", Constants.AMOUNT.get(), sized);
+        messages.sendConsole(Strings.M_SERVER_LOAD, Constants.MODULE, "Marry Time", Constants.AMOUNT, sized);
 
-        temp = EQueries.getMapString(query, "marry_bank", "location");
+        temp = EQueries.getMapString(query, Strings.MARRY_BANK, Strings.LOC);
         temp.forEach((k, v) -> {
             final String[] split = v.split(":");
             final Location loc = new Location(Bukkit.getWorld(split[0]),
@@ -60,7 +59,7 @@ public class Commands extends BaseCommand {
                     Float.parseFloat(split[5]));
             Vars.marryLocation.put(k, loc);
         });
-        messages.sendConsole("server.loaded", Constants.MODULE.get(), "MarryHomes", Constants.AMOUNT.get(), sized);
+        messages.sendConsole(Strings.M_SERVER_LOAD, Constants.MODULE, "Marry Homes", Constants.AMOUNT, sized);
     }
 
     @Default
@@ -76,25 +75,25 @@ public class Commands extends BaseCommand {
         final double money = EterniaMarriage.serverConfig.getDouble("money.marry");
 
         if (!economy.has(player, money)) {
-            messages.sendMessage("server.no-balance", "%money%", money, player);
+            messages.sendMessage(Strings.M_BALANCE_NO, Constants.MONEY, money, player);
             return;
         }
 
         if (wifeName.equals(husbandName)) {
-            messages.sendMessage("server.yourself", player);
+            messages.sendMessage(Strings.M_SERVER_YOUR, player);
             return;
         }
         if (APIMarry.isMarried(wifeName) || APIMarry.isMarried(husbandName)) {
-            messages.sendMessage("marry.already-married", player);
+            messages.sendMessage(Strings.M_MARRY_ALREADY, player);
             return;
         }
         if ((Vars.proMarry.containsKey(wifeName) || Vars.proMarry.containsKey(husbandName))) {
-            messages.sendMessage("marry.already-sent", player);
+            messages.sendMessage(Strings.M_MARRY_ALREADY_SENT, player);
             return;
         }
 
         economy.withdrawPlayer(player, money);
-        messages.broadcastMessage("marry.advice", Constants.PLAYER.get(), wife.getDisplayName(), Constants.TARGET.get(), husband.getDisplayName());
+        messages.broadcastMessage(Strings.M_MARRY_ADVICE, Constants.PLAYER, wife.getDisplayName(), Constants.TARGET, husband.getDisplayName());
         sendMarry(wife, husband, wifeName);
         sendMarry(husband, wife, husbandName);
     }
@@ -105,7 +104,7 @@ public class Commands extends BaseCommand {
         plugin.getFiles().loadConfigs();
         plugin.getFiles().loadDatabase();
         plugin.getFiles().loadMessages();
-        messages.sendMessage("server.reload", player);
+        messages.sendMessage(Strings.M_SERVER_RELOAD, player);
     }
 
     @Subcommand("divorce")
@@ -116,18 +115,17 @@ public class Commands extends BaseCommand {
         if (Vars.marry.get(wifeName).equals(husbandName) && Vars.marry.get(husbandName).equals(wifeName)) {
             marryDeny(wifeName, husbandName);
         } else {
-            messages.sendMessage("marry.no-marry", player);
+            messages.sendMessage(Strings.M_MARRY_NO, player);
         }
     }
 
     @Subcommand("accept")
     public void onAccept(Player player) {
         final String wifeName = player.getName();
-
         if (Vars.proMarry.containsValue(wifeName)) {
             final String husbandName = Vars.proMarry.get(wifeName);
             if (Vars.resMarry.get(husbandName)) {
-                messages.broadcastMessage("marry.sucess", Constants.TARGET.get(), husbandName, Constants.PLAYER.get(), player.getName());
+                messages.broadcastMessage(Strings.M_MARRY_SUCESS, Constants.TARGET, husbandName, Constants.PLAYER, player.getName());
                 marrySucess(wifeName, husbandName);
                 Vars.resMarry.remove(wifeName);
                 Vars.resMarry.remove(husbandName);
@@ -135,26 +133,25 @@ public class Commands extends BaseCommand {
                 Vars.proMarry.remove(husbandName);
             } else {
                 Vars.resMarry.put(wifeName, true);
-                messages.broadcastMessage("marry.accept", Constants.PLAYER.get(), player.getDisplayName());
+                messages.broadcastMessage(Strings.M_MARRY_ACCEPT, Constants.PLAYER, player.getDisplayName());
             }
         }else {
-            messages.sendMessage("marry.no-proposal", player);
+            messages.sendMessage(Strings.M_MARRY_PROPOSAL, player);
         }
     }
 
     @Subcommand("deny")
     public void onDeny(Player player) {
         final String wifeName = player.getName();
-
         if (Vars.proMarry.containsValue(wifeName)) {
             final String husbandName = Vars.proMarry.get(wifeName);
             Vars.resMarry.remove(husbandName);
             Vars.proMarry.remove(husbandName);
             Vars.resMarry.remove(wifeName);
             Vars.proMarry.remove(wifeName);
-            messages.broadcastMessage("marry.deny", Constants.PLAYER.get(), player.getDisplayName());
+            messages.broadcastMessage(Strings.M_MARRY_DENY, Constants.PLAYER, player.getDisplayName());
         } else {
-            messages.sendMessage("marry.no-proposal", player);
+            messages.sendMessage(Strings.M_MARRY_PROPOSAL, player);
         }
     }
 
@@ -168,15 +165,15 @@ public class Commands extends BaseCommand {
                 if (economy.has(player, amount)) {
                     economy.withdrawPlayer(player, amount);
                     APIMarry.giveMarryBankMoney(marryBank, amount);
-                    messages.sendMessage("commands.deposit", Constants.AMOUNT.get(), amount, player);
+                    messages.sendMessage(Strings.M_COMMANDS_DEPOSIT, Constants.AMOUNT, amount, player);
                 } else {
-                    messages.sendMessage("server.no-bal", player);
+                    messages.sendMessage(Strings.M_NO_BAL, player);
                 }
             } else {
-                messages.sendMessage("server.no-money", player);
+                messages.sendMessage(Strings.M_NO_MONEY, player);
             }
         } else {
-            messages.sendMessage("commands.no-marry", player);
+            messages.sendMessage(Strings.M_COMMANDS_NO_MARRY, player);
         }
     }
 
@@ -190,10 +187,10 @@ public class Commands extends BaseCommand {
                     giveItem(player, partner, itemStack);
                 }
             } else {
-                messages.sendMessage("commands.offline", player);
+                messages.sendMessage(Strings.M_COMMANDS_OFFLINE, player);
             }
         } else {
-            messages.sendMessage("commands.no-marry", player);
+            messages.sendMessage(Strings.M_COMMANDS_NO_MARRY, player);
         }
 
     }
@@ -209,13 +206,13 @@ public class Commands extends BaseCommand {
                     economy.depositPlayer(player, amount);
                     APIMarry.removeMarryBankMoney(marryBank, amount);
                 } else {
-                    messages.sendMessage("commands.no-money", "%money%", amount, player);
+                    messages.sendMessage(Strings.M_COMMANDS_NO_MONEY, Constants.MONEY, amount, player);
                 }
             } else {
-                messages.sendMessage("server.no-money", player);
+                messages.sendMessage(Strings.M_NO_MONEY, player);
             }
         } else {
-            messages.sendMessage("commands.no-marry", player);
+            messages.sendMessage(Strings.M_COMMANDS_NO_MARRY, player);
         }
     }
 
@@ -223,10 +220,9 @@ public class Commands extends BaseCommand {
     public void onHome(Player player) {
         final String marryName = APIMarry.getMarriedBankName(player.getName());
         if (Vars.marryLocation.get(marryName) != error) {
-            Vars.teleports.put(player, new PlayerTeleport(player, Vars.marryLocation.get(marryName), "server.timing"));
-            messages.sendMessage("commands.home", player);
+            Vars.teleports.put(player, new PlayerTeleport(player, Vars.marryLocation.get(marryName), Strings.M_COMMANDS_DONE));
         } else {
-            messages.sendMessage("commands.no-home", player);
+            messages.sendMessage(Strings.M_COMMANDS_NO_HOME, player);
         }
     }
 
@@ -244,11 +240,11 @@ public class Commands extends BaseCommand {
                     ":" + ((int) loc.getZ()) +
                     ":" + ((int) loc.getYaw()) +
                     ":" + ((int) loc.getPitch());
-            EQueries.executeQuery("UPDATE " + EterniaMarriage.serverConfig.getString("sql.table-bank") + " SET location='" + saveloc + "' WHERE marry_bank='" + marryName + "';");
+            EQueries.executeQuery(Constants.getQueryUpdate(Constants.TABLE_BANK, Strings.LOC, saveloc, Strings.MARRY_BANK, marryName));
             Vars.marryLocation.put(marryName, loc);
-            messages.sendMessage("commands.home-save", "%money%", setHomeCost, player);
+            messages.sendMessage(Strings.M_COMMANDS_HOME_SAVE, Constants.MONEY, setHomeCost, player);
         } else {
-            messages.sendMessage("commands.no-money", "%money%", setHomeCost, player);
+            messages.sendMessage(Strings.M_COMMANDS_NO_MONEY, Constants.MONEY, setHomeCost, player);
         }
 
     }
@@ -259,16 +255,16 @@ public class Commands extends BaseCommand {
     }
 
     private void sendMarry(Player player, Player target, String name) {
-        messages.sendMessage("marry.send-proposal", Constants.PLAYER.get(), player.getDisplayName(), Constants.TARGET.get(), target.getDisplayName(), player);
+        messages.sendMessage(Strings.M_MARRY_SENT, Constants.PLAYER, player.getDisplayName(), Constants.TARGET, target.getDisplayName(), player);
         Vars.resMarry.put(name, false);
         Vars.proMarry.put(name, target.getName());
     }
 
     private void marrySucess(String nameOne, String nameTwo) {
-        EQueries.executeQuery("INSERT INTO " + EterniaMarriage.serverConfig.getString("sql.table-marry") + " (player_name, marry_name) VALUES('" + nameOne + "', '" + nameTwo + "');");
-        EQueries.executeQuery("INSERT INTO " + EterniaMarriage.serverConfig.getString("sql.table-marry") + " (player_name, marry_name) VALUES('" + nameTwo + "', '" + nameOne + "');");
-        EQueries.executeQuery("INSERT INTO " + EterniaMarriage.serverConfig.getString("sql.table-bank") +
-                " (marry_bank, balance, marry_time, location) VALUES('" + nameOne + nameTwo + "', '" + 0 + "', '" + 0 + "', 'world:666:666:666:666:666');");
+        EQueries.executeQuery(Constants.getQueryInsert(Constants.TABLE_MARRY, Strings.PNAME, nameOne, Strings.MARRY_NAME, nameTwo));
+        EQueries.executeQuery(Constants.getQueryInsert(Constants.TABLE_MARRY, Strings.PNAME, nameTwo, Strings.MARRY_NAME, nameOne));
+        EQueries.executeQuery(Constants.getQueryInsert(Constants.TABLE_BANK, Strings.MARRY_BANK, nameOne + nameTwo,
+                Strings.BALANCE, 0, Strings.MARRY_TIME, 0, Strings.LOC, "world:666:666:666:666:666"));
         Vars.marry.put(nameOne, nameTwo);
         Vars.marry.put(nameTwo, nameOne);
     }
@@ -277,9 +273,9 @@ public class Commands extends BaseCommand {
         String nameBank;
         if (Vars.marryBank.containsKey(nameOne + nameTwo)) nameBank = nameOne + nameTwo;
         else nameBank = nameTwo + nameOne;
-        EQueries.executeQuery("DELETE FROM " + EterniaMarriage.serverConfig.getString("sql.table-bank") + " WHERE marry_bank='" + nameBank + "'");
-        EQueries.executeQuery("DELETE FROM " + EterniaMarriage.serverConfig.getString("sql.table-marry") + " WHERE player_name='" + nameOne + "'");
-        EQueries.executeQuery("DELETE FROM " + EterniaMarriage.serverConfig.getString("sql.table-marry") + " WHERE player_name='" + nameTwo + "'");
+        EQueries.executeQuery(Constants.getQueryDelete(Constants.TABLE_BANK, Strings.MARRY_BANK, nameBank));
+        EQueries.executeQuery(Constants.getQueryDelete(Constants.TABLE_MARRY, Strings.PNAME, nameOne));
+        EQueries.executeQuery(Constants.getQueryDelete(Constants.TABLE_MARRY, Strings.PNAME, nameTwo));
         Vars.marry.remove(nameOne);
         Vars.marry.remove(nameTwo);
         Vars.marryLocation.remove(nameBank);

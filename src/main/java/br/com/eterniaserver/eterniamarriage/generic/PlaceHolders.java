@@ -25,11 +25,7 @@ public class PlaceHolders extends PlaceholderExpansion {
 
     @Override
     public String onPlaceholderRequest(Player p, String identifier) {
-        if (p == null) {
-            return "";
-        } else {
-            return getPlaceHolder(getIdentifier(identifier), p.getName());
-        }
+        return p != null ? getPlaceHolder(getIdentifier(identifier), p.getName()) : "";
     }
 
     private byte getIdentifier(final String identifier) {
@@ -52,21 +48,16 @@ public class PlaceHolders extends PlaceholderExpansion {
     private String getPlaceHolder(final byte var4, final String playerName) {
         switch (var4) {
             case 0:
-                if (APIMarry.isMarried(playerName)) return APIMarry.getMarriedBankName(playerName);
-                else return "";
+                return APIMarry.isMarried(playerName) ? APIMarry.getMarriedBankName(playerName) : "";
             case 1:
-                if (APIMarry.isMarried(playerName)) return APIMarry.getPartner(playerName);
-                else return "Ninguém";
+                return APIMarry.isMarried(playerName) ? APIMarry.getPartner(playerName) : "Ninguém";
             case 2:
-                if (APIMarry.isMarried(playerName)) return "&c❤";
-                else return "&7❤";
+                return APIMarry.isMarried(playerName) ? "&c❤" : "&7❤";
             case 3:
-                if (APIMarry.isMarried(playerName)) return "&c❤";
-                else return "";
+                return APIMarry.isMarried(playerName) ? "&c❤" : "";
             case 4:
-                if (APIMarry.isMarried(playerName)) return getMoney(playerName);
-                else return "";
-             default:
+                return APIMarry.isMarried(playerName) ? getMoney(playerName) : "";
+            default:
                  return null;
         }
     }

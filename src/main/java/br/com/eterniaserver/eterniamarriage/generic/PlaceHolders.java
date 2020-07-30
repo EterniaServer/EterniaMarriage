@@ -2,8 +2,9 @@ package br.com.eterniaserver.eterniamarriage.generic;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 
+import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 
 public class PlaceHolders extends PlaceholderExpansion {
@@ -11,20 +12,36 @@ public class PlaceHolders extends PlaceholderExpansion {
     private final DecimalFormat df2 = new DecimalFormat(".##");
     private final String version = this.getClass().getPackage().getImplementationVersion();
 
+    @Override
+    public boolean persist(){
+        return true;
+    }
+
+    @Override
+    public boolean canRegister() {
+        return true;
+    }
+
+    @Override
+    @Nonnull
     public String getAuthor() {
         return "yurinogueira";
     }
 
+    @Override
+    @Nonnull
     public String getIdentifier() {
         return "eterniamarriage";
     }
 
+    @Override
+    @Nonnull
     public String getVersion() {
         return this.version;
     }
 
     @Override
-    public String onPlaceholderRequest(Player p, String identifier) {
+    public String onRequest(OfflinePlayer p, @Nonnull String identifier) {
         return p != null ? getPlaceHolder(getIdentifier(identifier), p.getName()) : "";
     }
 

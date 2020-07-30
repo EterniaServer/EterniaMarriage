@@ -18,7 +18,6 @@ public class Strings {
     public static final String M_SERVER_LOAD = "server.loaded";
     public static final String M_SERVER_TIMING = "server.timing";
     public static final String M_SERVER_MOVE = "server.move";
-    public static final String M_NO_PAPI = "server.no-papi";
     public static final String M_NO_MONEY = "server.no-money";
     public static final String M_NO_BAL = "server.no-bal";
 

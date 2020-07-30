@@ -3,7 +3,6 @@ package br.com.eterniaserver.eterniamarriage;
 import br.com.eterniaserver.eternialib.EFiles;
 import br.com.eterniaserver.eternialib.EterniaLib;
 import br.com.eterniaserver.eterniamarriage.dependencies.eternialib.Files;
-import br.com.eterniaserver.eterniamarriage.dependencies.papi.PAPI;
 import br.com.eterniaserver.eterniamarriage.generic.*;
 
 import net.milkbowl.vault.economy.Economy;
@@ -16,8 +15,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class EterniaMarriage extends JavaPlugin {
 
-    private final PlaceHolders placeHolders = new PlaceHolders();
-
     private EFiles messages;
     private Files files;
 
@@ -27,6 +24,7 @@ public class EterniaMarriage extends JavaPlugin {
     private Economy econ;
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onEnable() {
 
         files = new Files(this);
@@ -36,8 +34,8 @@ public class EterniaMarriage extends JavaPlugin {
         files.loadDatabase();
 
         messages = new EFiles(msgConfig);
+        new PlaceHolders().register();
 
-        placeholderAPIHook();
         vault();
 
         EterniaLib.getManager().registerCommand(new Commands(this));
@@ -62,14 +60,6 @@ public class EterniaMarriage extends JavaPlugin {
 
     public Economy getEcon() {
         return econ;
-    }
-
-    private void placeholderAPIHook() {
-        new PAPI(this);
-    }
-
-    public PlaceHolders getPlaceHolders() {
-        return placeHolders;
     }
 
     public void vault() {

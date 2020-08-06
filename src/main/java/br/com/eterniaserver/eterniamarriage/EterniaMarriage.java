@@ -24,7 +24,6 @@ public class EterniaMarriage extends JavaPlugin {
     private Economy econ;
 
     @Override
-    @SuppressWarnings("deprecation")
     public void onEnable() {
 
         files = new Files(this);
@@ -40,14 +39,10 @@ public class EterniaMarriage extends JavaPlugin {
 
         EterniaLib.getManager().registerCommand(new Commands(this));
 
+        this.getServer().getPluginManager().registerEvents(new Events(), this);
         this.getServer().getPluginManager().registerEvents(new OnMcMMOPlayerXpGain(), this);
-        this.getServer().getScheduler().runTaskTimer(this, new Checks(this), 0L, 100L);
+        this.getServer().getScheduler().runTaskTimer(this, new Checks(this), 0L, 20L);
 
-    }
-
-    @Override
-    public void onDisable() {
-        new MarryTime().saveTime();
     }
 
     public Files getFiles() {

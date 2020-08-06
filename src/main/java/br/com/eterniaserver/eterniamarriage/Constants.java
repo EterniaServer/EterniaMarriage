@@ -13,6 +13,7 @@ public class Constants {
     public static final String MONEY = "%money%";
     public static final String COOLDOWN = "%cooldown%";
 
+    public static final String TABLE_CACHE = EterniaMarriage.serverConfig.getString("sql.table-cache");
     public static final String TABLE_MARRY = EterniaMarriage.serverConfig.getString("sql.table-marry");
     public static final String TABLE_BANK = EterniaMarriage.serverConfig.getString("sql.table-bank");
 
@@ -33,12 +34,8 @@ public class Constants {
     }
 
     public static String getQueryInsert(final String table, final String type, final Object value) {
-        return "INSERT INTO " + table + " (" + type + ") VALUES ("
-                + value + ");";
-    }
-
-    public static String getQueryInsert(final String table, final String type, final Object value, final String type2, final Object value2) {
-        return "INSERT INTO " + table + " (" + type + ", " + type2 + ") VALUES ('" + value + "', '" + value2 + "');";
+        return "INSERT INTO " + table + " " + type + " VALUES "
+                + value + ";";
     }
 
 }

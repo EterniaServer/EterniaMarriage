@@ -7,7 +7,10 @@ import br.com.eterniaserver.eterniamarriage.Strings;
 import br.com.eterniaserver.paperlib.PaperLib;
 
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class Checks implements Runnable {
 
@@ -20,33 +23,29 @@ public class Checks implements Runnable {
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            final String partner = player.getName();
-            if (APIMarry.isMarried(partner)) {
-                final Player partnerPlayer = Bukkit.getPlayer(partner);
-                final String marryName = APIMarry.getMarriedBankName(partner);
-                if (partnerPlayer != null && partnerPlayer.isOnline()) {
-                    getLifePoint(player, marryName);
-                } else {
-                    Vars.saveTime.remove(marryName);
+            final UUID uuid = UUIDFetcher.getUUIDOf(player.getName());
+            if (APIMarry.isMarried(uuid)) {
+                final Player partner = Bukkit.getPlayer(APIMarry.getPartnerUUID(uuid));
+                if (partner != null && partner.isOnline()) {
+                    getHealthRegen(player);
                 }
+                getPlayersInTp(player);
             }
-            getPlayersInTp(player);
         }
     }
 
-    private void getLifePoint(Player player, final String marryName) {
+    private void getHealthRegen(Player player) {
         if (APIMarry.isCloseToPartner(player)) {
-            double health = player.getHealth();
-            if (health + 1 <= 20) {
-                player.setHealth(health + 1);
+            final double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+            final double health = player.getHealth();
+            if (health < maxHealth) {
+                double newHeart = health + 0.5;
+                if (newHeart > 20.0) newHeart = 20.0;
+                player.setHealth(newHeart);
             }
         }
-        if (Vars.saveTime.containsKey(marryName)) {
-            Vars.marryTime.put(marryName, System.currentTimeMillis() - Vars.saveTime.get(marryName));
-        } else {
-            Vars.saveTime.put(marryName, System.currentTimeMillis());
-        }
     }
+
 
     private void getPlayersInTp(final Player player) {
         if (Vars.teleports.containsKey(player)) {
@@ -72,5 +71,4 @@ public class Checks implements Runnable {
             }
         }
     }
-
 }

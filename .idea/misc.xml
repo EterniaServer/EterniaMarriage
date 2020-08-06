@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
+    <entry_points version="2.0">
+      <entry_point TYPE="field" FQNAME="br.com.eterniaserver.eterniamarriage.Strings MARRY_BANK" />
+      <entry_point TYPE="field" FQNAME="br.com.eterniaserver.eterniamarriage.Strings MARRY_TIME" />
+      <entry_point TYPE="field" FQNAME="br.com.eterniaserver.eterniamarriage.Strings PNAME" />
+    </entry_points>
     <pattern value="br.com.eterniaserver.eterniamarriage.generic.Checks" />
     <pattern value="br.com.eterniaserver.eterniamarriage.generic.Checks" method="Checks" />
     <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" />
@@ -28,6 +33,15 @@
     <pattern value="br.com.eterniaserver.eterniamarriage.generic.PlayerTeleport" method="PlayerTeleport" />
     <pattern value="br.com.eterniaserver.eterniamarriage.dependencies.eternialib.Table" />
     <pattern value="br.com.eterniaserver.eterniamarriage.dependencies.eternialib.Table" method="Table" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Events" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Events" method="onPlayerJoin" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Events" method="onPlayerLeave" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.Strings" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.APIMarry" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.APIMarry" method="getPartnerDisplay" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.APIMarry" method="getPartnerName" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Events" method="onAsyncPlayerPreLogin" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.Strings" method="Strings" />
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">

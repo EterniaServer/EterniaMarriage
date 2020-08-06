@@ -6,12 +6,19 @@ public class Strings {
         throw new IllegalStateException("Utility class");
     }
 
+    public static final String UUID = "uuid";
+    public static final String MARRY_UUID = "marry_uuid";
+    public static final String MARRY_ID = "marry_id";
     public static final String PNAME = "player_name";
     public static final String MARRY_NAME = "marry_name";
+    public static final String MARRY_DISPLAY = "marry_display";
     public static final String MARRY_BANK = "marry_bank";
     public static final String BALANCE = "balance";
     public static final String LOC = "location";
     public static final String MARRY_TIME = "marry_time";
+    public static final String HOURS = "hours";
+    public static final String TIME = "time";
+    public static final String LAST = "last";
 
     public static final String M_SERVER_RELOAD = "server.reload";
     public static final String M_SERVER_YOUR = "server.yourself";

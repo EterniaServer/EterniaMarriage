@@ -2,66 +2,67 @@ package br.com.eterniaserver.eterniamarriage.generic;
 
 import br.com.eterniaserver.eternialib.EQueries;
 import br.com.eterniaserver.eterniamarriage.Constants;
-
 import br.com.eterniaserver.eterniamarriage.Strings;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class APIMarry {
 
     private APIMarry() {
         throw new IllegalStateException("Utility class");
     }
-
-    public static boolean isMarried(String playerName) {
-        return Vars.marry.containsKey(playerName);
+    public static boolean isMarried(UUID uuid) {
+        return Vars.marryId.containsKey(uuid);
     }
 
-    public static String getPartner(String playerName) {
-        return Vars.marry.get(playerName);
+    public static UUID getPartnerUUID(UUID uuid) {
+        return Vars.userMarry.get(uuid);
+    }
+
+    public static String getPartnerName(UUID uuid) {
+        return Vars.marryName.get(getPartnerUUID(uuid));
+    }
+
+    public static String getPartnerDisplay(UUID uuid) {
+        return Vars.marryDisplay.get(getPartnerUUID(uuid));
     }
 
     public static boolean isCloseToPartner(Player player) {
-        Location location = player.getLocation();
-        final String playerName = player.getName();
-        if (APIMarry.isMarried(playerName)) {
-            final String partnerName = APIMarry.getPartner(playerName);
-            final Player partner = Bukkit.getPlayer(partnerName);
-            if (partner != null && partner.isOnline()) {
-                Location partnerLocation = partner.getLocation();
-                return partnerLocation.getWorld() == location.getWorld() && partnerLocation.distanceSquared(location) <= 100;
-            }
+        final Location location = player.getLocation();
+        final OfflinePlayer partner = Bukkit.getOfflinePlayer(getPartnerUUID(UUIDFetcher.getUUIDOf(player.getName())));
+        if (partner.isOnline()) {
+            Location partnerLocation = partner.getPlayer().getLocation();
+            return partnerLocation.getWorld() == location.getWorld() && partnerLocation.distanceSquared(location) <= 100;
         }
         return false;
     }
 
-    public static String getMarriedBankName(String playerName) {
-        if (isMarried(playerName)) {
-            final String tempBankName = playerName + Vars.marry.get(playerName);
-            return Vars.marryBank.containsKey(tempBankName) ? tempBankName : Vars.marry.get(playerName) + playerName;
-        } else {
-            return "";
+    public static int getMarryBankId(UUID uuid) {
+        return Vars.marryId.get(uuid);
+    }
+
+    public static double getMarryBankMoney(int bankId) {
+        return Vars.marryBankMoney.getOrDefault(bankId, 0.0);
+    }
+
+    public static void setMarryBankMoney(int id, double amount) {
+        if (Vars.marryBankMoney.containsKey(id)) {
+            Vars.marryBankMoney.put(id, amount);
+            EQueries.executeQuery(Constants.getQueryUpdate(Constants.TABLE_BANK, Strings.BALANCE, amount, Strings.MARRY_ID, id));
         }
     }
 
-    public static double getMarryBankMoney(String bankName) {
-        return Vars.marryBank.containsKey(bankName) ? Vars.marryBank.get(bankName) : 0;
+    public static void giveMarryBankMoney(int id, double amount) {
+        setMarryBankMoney(id, getMarryBankMoney(id) + amount);
     }
 
-    public static void setMarryBankMoney(String bankName, Double amount) {
-        if (Vars.marryBank.containsKey(bankName)) {
-            Vars.marryBank.put(bankName, amount);
-            EQueries.executeQuery(Constants.getQueryUpdate(Constants.TABLE_BANK, Strings.BALANCE, amount, Strings.MARRY_BANK, bankName));
-        }
-    }
-
-    public static void giveMarryBankMoney(String bankName, Double amount) {
-        setMarryBankMoney(bankName, getMarryBankMoney(bankName) + amount);
-    }
-
-    public static void removeMarryBankMoney(String bankName, Double amount) {
-        setMarryBankMoney(bankName, getMarryBankMoney(bankName) - amount);
+    public static void removeMarryBankMoney(int id, double amount) {
+        setMarryBankMoney(id, getMarryBankMoney(id) - amount);
     }
 
 }

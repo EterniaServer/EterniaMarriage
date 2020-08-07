@@ -24,11 +24,11 @@ public class Events implements Listener {
         final String playerName = event.getName();
         final UUID uuid = UUIDFetcher.getUUIDOf(playerName);
         if (!Vars.userCache.containsKey(uuid)) {
-            EQueries.executeQuery(Constants.getQueryInsert(Constants.TABLE_CACHE, "(uuid, player_name)", "('" + uuid.toString() + "', '" + playerName + "')"));
+            EQueries.executeQuery(Constants.getQueryInsert(Constants.TABLE_CACHE, "(uuid, player_name)", "('" + uuid.toString() + "', '" + playerName + "')"), false);
         } else {
             if (!Vars.userCache.get(uuid).equals(playerName)) {
                 Vars.userCache.put(uuid, playerName);
-                EQueries.executeQuery(Constants.getQueryUpdate(Constants.TABLE_CACHE, Strings.PNAME, playerName, Strings.UUID, uuid));
+                EQueries.executeQuery(Constants.getQueryUpdate(Constants.TABLE_CACHE, Strings.PNAME, playerName, Strings.UUID, uuid), false);
             }
         }
     }

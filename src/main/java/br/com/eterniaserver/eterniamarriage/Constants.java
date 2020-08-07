@@ -18,7 +18,7 @@ public class Constants {
     public static final String TABLE_BANK = EterniaMarriage.serverConfig.getString("sql.table-bank");
 
     public static String getQueryCreateTable(final String table, final String values) {
-        return "CREATE TABLE IF NOT EXISTS " + table + values + ";";
+        return "CREATE TABLE IF NOT EXISTS " + table + " " + values + ";";
     }
 
     public static String getQuerySelectAll(final String table) {
@@ -34,8 +34,7 @@ public class Constants {
     }
 
     public static String getQueryInsert(final String table, final String type, final Object value) {
-        return "INSERT INTO " + table + " " + type + " VALUES "
-                + value + ";";
+        return "INSERT INTO " + table + " " + type + " VALUES " + value + ";";
     }
 
 }

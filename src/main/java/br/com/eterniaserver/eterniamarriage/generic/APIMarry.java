@@ -29,7 +29,7 @@ public class APIMarry {
     }
 
     public static String getPartnerDisplay(UUID uuid) {
-        return Vars.marryDisplay.get(getPartnerUUID(uuid));
+        return Vars.marryDisplay.get(uuid);
     }
 
     public static boolean isCloseToPartner(Player player) {

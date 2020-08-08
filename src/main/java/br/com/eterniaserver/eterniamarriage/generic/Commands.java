@@ -40,14 +40,11 @@ public class Commands extends BaseCommand {
         HashMap<String, String> temp = EQueries.getMapString(query, Strings.UUID, Strings.MARRY_UUID);
         temp.forEach((k, v) -> Vars.userMarry.put(UUID.fromString(k), UUID.fromString(v)));
 
-        temp = EQueries.getMapString(query, Strings.MARRY_UUID, Strings.MARRY_NAME);
-        temp.forEach((k, v) -> {
-            UUID uuid = UUID.fromString(k);
-            Vars.marryName.put(Vars.userMarry.get(uuid), v);
-        });
+        temp = EQueries.getMapString(query, Strings.UUID, Strings.MARRY_NAME);
+        temp.forEach((k, v) -> Vars.marryName.put(UUID.fromString(k), v));
 
-        temp = EQueries.getMapString(query, Strings.MARRY_UUID, Strings.MARRY_DISPLAY);
-        temp.forEach((k, v) -> Vars.marryDisplay.put(Vars.userMarry.get(UUID.fromString(k)), v));
+        temp = EQueries.getMapString(query, Strings.UUID, Strings.MARRY_DISPLAY);
+        temp.forEach((k, v) -> Vars.marryDisplay.put(UUID.fromString(k), v));
 
         temp = EQueries.getMapString(query, Strings.UUID, Strings.MARRY_ID);
         temp.forEach((k, v) -> Vars.marryId.put(UUID.fromString(k), Integer.parseInt(v)));
@@ -333,8 +330,8 @@ public class Commands extends BaseCommand {
                 "('" + wifeUUID.toString() + "', '" + husbandUUID.toString() + "', '" + husband + "', '" + husband + "', '" + id + "')"), false);
         Vars.marryId.put(wifeUUID, id);
         Vars.userMarry.put(wifeUUID, husbandUUID);
-        Vars.marryName.put(wifeUUID, wife);
-        Vars.marryDisplay.put(wifeUUID, wife);
+        Vars.marryName.put(wifeUUID, husband);
+        Vars.marryDisplay.put(wifeUUID, husband);
     }
 
     private void marryDeny(UUID wifeUUID, UUID husbandUUID) {

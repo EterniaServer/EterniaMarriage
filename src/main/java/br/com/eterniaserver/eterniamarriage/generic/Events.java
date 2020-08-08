@@ -27,10 +27,10 @@ public class Events implements Listener {
             EQueries.executeQuery(Constants.getQueryInsert(Constants.TABLE_CACHE, "(uuid, player_name)", "('" + uuid.toString() + "', '" + playerName + "')"), false);
         } else {
             if (!Vars.userCache.get(uuid).equals(playerName)) {
-                Vars.userCache.put(uuid, playerName);
                 EQueries.executeQuery(Constants.getQueryUpdate(Constants.TABLE_CACHE, Strings.PNAME, playerName, Strings.UUID, uuid), false);
             }
         }
+        Vars.userCache.put(uuid, playerName);
     }
 
     @EventHandler (priority = EventPriority.MONITOR)
@@ -46,8 +46,8 @@ public class Events implements Listener {
                 EQueries.executeQuery(Constants.getQueryUpdate(Constants.TABLE_MARRY, Strings.MARRY_NAME, playerName, Strings.UUID, partnerUUID));
             }
             if (!Vars.marryDisplay.get(partnerUUID).equals(playerDisplay)) {
-                Vars.marryDisplay.put(partnerUUID, playerName);
-                EQueries.executeQuery(Constants.getQueryUpdate(Constants.TABLE_MARRY, Strings.MARRY_DISPLAY, playerName, Strings.UUID, partnerUUID));
+                Vars.marryDisplay.put(partnerUUID, playerDisplay);
+                EQueries.executeQuery(Constants.getQueryUpdate(Constants.TABLE_MARRY, Strings.MARRY_DISPLAY, playerDisplay, Strings.UUID, partnerUUID));
             }
             final Player partner = Bukkit.getPlayer(partnerUUID);
             if (partner != null && partner.isOnline()) {

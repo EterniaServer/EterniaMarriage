@@ -1,4 +1,4 @@
-package br.com.eterniaserver.eterniamarriage.generic;
+package br.com.eterniaserver.eterniamarriage.objects;
 
 import br.com.eterniaserver.eterniamarriage.EterniaMarriage;
 

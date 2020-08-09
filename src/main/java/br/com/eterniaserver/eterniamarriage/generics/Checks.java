@@ -1,9 +1,11 @@
-package br.com.eterniaserver.eterniamarriage.generic;
+package br.com.eterniaserver.eterniamarriage.generics;
 
 import br.com.eterniaserver.eternialib.EFiles;
+import br.com.eterniaserver.eternialib.UUIDFetcher;
 import br.com.eterniaserver.eterniamarriage.Constants;
 import br.com.eterniaserver.eterniamarriage.EterniaMarriage;
 import br.com.eterniaserver.eterniamarriage.Strings;
+import br.com.eterniaserver.eterniamarriage.objects.PlayerTeleport;
 import br.com.eterniaserver.paperlib.PaperLib;
 
 import org.bukkit.Bukkit;
@@ -25,7 +27,7 @@ public class Checks implements Runnable {
         for (Player player : Bukkit.getOnlinePlayers()) {
             final UUID uuid = UUIDFetcher.getUUIDOf(player.getName());
             if (APIMarry.isMarried(uuid)) {
-                final Player partner = Bukkit.getPlayer(APIMarry.getPartnerUUID(uuid));
+                final Player partner = Bukkit.getOfflinePlayer(APIMarry.getPartnerUUID(uuid)).getPlayer();
                 if (partner != null && partner.isOnline()) {
                     getHealthRegen(player);
                 }

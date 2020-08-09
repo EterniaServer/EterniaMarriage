@@ -2,6 +2,7 @@ package br.com.eterniaserver.eterniamarriage.dependencies.eternialib;
 
 import br.com.eterniaserver.eternialib.EFiles;
 import br.com.eterniaserver.eterniamarriage.EterniaMarriage;
+
 import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.IOException;

@@ -1,12 +1,15 @@
-package br.com.eterniaserver.eterniamarriage.generic;
+package br.com.eterniaserver.eterniamarriage.generics;
 
+import br.com.eterniaserver.eternialib.UUIDFetcher;
 import br.com.eterniaserver.eterniamarriage.EterniaMarriage;
+
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import javax.annotation.Nonnull;
+
 import java.text.DecimalFormat;
 import java.util.UUID;
 
@@ -84,7 +87,7 @@ public class PlaceHolders extends PlaceholderExpansion {
                 return APIMarry.isMarried(uuid) ? APIMarry.getPartnerName(uuid) : "Ninguém";
             // marryid
             case 3:
-                return APIMarry.isMarried(uuid) ? String.valueOf(APIMarry.getMarryBankId(uuid)) : "";
+                return APIMarry.isMarried(uuid) ? String.valueOf(APIMarry.getMarryId(uuid)) : "";
             // marrymoney
             case 4:
                 return APIMarry.isMarried(uuid) ? getMoney(uuid) : "";
@@ -103,12 +106,12 @@ public class PlaceHolders extends PlaceholderExpansion {
     }
 
     private String getMoney(final UUID uuid) {
-        return df2.format(APIMarry.getMarryBankMoney(APIMarry.getMarryBankId(uuid)));
+        return df2.format(APIMarry.getMarryMoney(APIMarry.getMarryId(uuid)));
     }
 
     private boolean isclose(final UUID uuid) {
         if (APIMarry.isMarried(uuid)) {
-            return APIMarry.isCloseToPartner(Bukkit.getPlayer(uuid));
+            return APIMarry.isCloseToPartner(Bukkit.getOfflinePlayer(uuid));
         }
         return false;
     }

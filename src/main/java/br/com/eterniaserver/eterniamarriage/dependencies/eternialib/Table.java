@@ -8,8 +8,6 @@ public class Table {
 
     public Table() {
 
-        EQueries.executeQuery(Constants.getQueryCreateTable(Constants.TABLE_CACHE, "(uuid varchar(36), " +
-                "player_name varchar(16))"), false);
         EQueries.executeQuery(Constants.getQueryCreateTable(Constants.TABLE_MARRY, "(uuid varchar(36), " +
                 "marry_uuid varchar(36), " +
                 "marry_name varchar(16), " +

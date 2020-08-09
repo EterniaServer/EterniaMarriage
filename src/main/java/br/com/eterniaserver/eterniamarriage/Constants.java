@@ -21,7 +21,7 @@ public class Constants {
         return "CREATE TABLE IF NOT EXISTS " + table + " " + values + ";";
     }
 
-    public static String getQuerySelectAll(final String table) {
+    public static String getQuerySelectAll(final String table)   {
         return "SELECT * FROM " + table + ";";
     }
 

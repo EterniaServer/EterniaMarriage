@@ -3,7 +3,7 @@ package br.com.eterniaserver.eterniamarriage;
 import br.com.eterniaserver.eternialib.EFiles;
 import br.com.eterniaserver.eternialib.EterniaLib;
 import br.com.eterniaserver.eterniamarriage.dependencies.eternialib.Files;
-import br.com.eterniaserver.eterniamarriage.generic.*;
+import br.com.eterniaserver.eterniamarriage.generics.*;
 
 import net.milkbowl.vault.economy.Economy;
 
@@ -33,7 +33,6 @@ public class EterniaMarriage extends JavaPlugin {
         files.loadDatabase();
 
         messages = new EFiles(msgConfig);
-        new PlaceHolders().register();
 
         vault();
 
@@ -42,6 +41,8 @@ public class EterniaMarriage extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new Events(), this);
         this.getServer().getPluginManager().registerEvents(new OnMcMMOPlayerXpGain(), this);
         this.getServer().getScheduler().runTaskTimer(this, new Checks(this), 0L, 20L);
+
+        new PlaceHolders().register();
 
     }
 

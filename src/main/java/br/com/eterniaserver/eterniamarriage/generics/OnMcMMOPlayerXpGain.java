@@ -1,4 +1,6 @@
-package br.com.eterniaserver.eterniamarriage.generic;
+package br.com.eterniaserver.eterniamarriage.generics;
+
+import br.com.eterniaserver.eternialib.UUIDFetcher;
 
 import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent;
 

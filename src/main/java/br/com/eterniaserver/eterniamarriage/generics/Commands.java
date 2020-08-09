@@ -200,7 +200,7 @@ public class Commands extends BaseCommand {
             final UUID wifeUUID = UUIDFetcher.getUUIDOf(wifeName);
             final UUID husbandUUID = UUIDFetcher.getUUIDOf(husbandName);
             if (APIMarry.isMarried(wifeUUID)) {
-                if (APIMarry.getPartnerUUID(wifeUUID) == husbandUUID) {
+                if (APIMarry.getPartnerUUID(wifeUUID).equals(husbandUUID)) {
                     marryDeny(wifeUUID, husbandUUID);
                     return;
                 }

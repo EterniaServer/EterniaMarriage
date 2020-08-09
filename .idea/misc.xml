@@ -69,6 +69,8 @@
     <pattern value="br.com.eterniaserver.eterniamarriage.objects.PlayerMarry" method="setMarryId" />
     <pattern value="br.com.eterniaserver.eterniamarriage.objects.PlayerMarry" method="setMarryUUID" />
     <pattern value="br.com.eterniaserver.eterniamarriage.objects.PlayerMarry" method="setUuid" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generics.APIMarry" method="APIMarry" />
+    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Events" method="onPlayerInteractEntity" />
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">

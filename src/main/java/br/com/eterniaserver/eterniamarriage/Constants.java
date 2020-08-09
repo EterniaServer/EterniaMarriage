@@ -13,7 +13,6 @@ public class Constants {
     public static final String MONEY = "%money%";
     public static final String COOLDOWN = "%cooldown%";
 
-    public static final String TABLE_CACHE = EterniaMarriage.serverConfig.getString("sql.table-cache");
     public static final String TABLE_MARRY = EterniaMarriage.serverConfig.getString("sql.table-marry");
     public static final String TABLE_BANK = EterniaMarriage.serverConfig.getString("sql.table-bank");
 

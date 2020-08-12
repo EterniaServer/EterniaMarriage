@@ -110,10 +110,7 @@ public class PlaceHolders extends PlaceholderExpansion {
     }
 
     private boolean isclose(final UUID uuid) {
-        if (APIMarry.isMarried(uuid)) {
-            return APIMarry.isCloseToPartner(Bukkit.getOfflinePlayer(uuid));
-        }
-        return false;
+        return APIMarry.isMarried(uuid) && APIMarry.isCloseToPartner(Bukkit.getOfflinePlayer(uuid));
     }
 
 }

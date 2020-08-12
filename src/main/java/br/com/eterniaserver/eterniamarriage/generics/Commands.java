@@ -3,7 +3,6 @@ package br.com.eterniaserver.eterniamarriage.generics;
 import br.com.eterniaserver.acf.BaseCommand;
 import br.com.eterniaserver.acf.annotation.*;
 import br.com.eterniaserver.acf.bukkit.contexts.OnlinePlayer;
-import br.com.eterniaserver.eternialib.EFiles;
 import br.com.eterniaserver.eternialib.EQueries;
 import br.com.eterniaserver.eternialib.EterniaLib;
 import br.com.eterniaserver.eternialib.UUIDFetcher;
@@ -39,19 +38,17 @@ public class Commands extends BaseCommand {
     private final Economy economy;
     private final EterniaMarriage plugin;
     private final ItemStack air = new ItemStack(Material.AIR);
-    private final EFiles messages;
     private final Location error;
 
     public Commands(EterniaMarriage plugin) {
         error = new Location(Bukkit.getWorld("world"), 666, 666, 666, 666, 666);
         this.plugin = plugin;
-        this.messages = plugin.getEFiles();
         this.economy = plugin.getEcon();
 
         if (EterniaLib.getMySQL()) {
             EterniaLib.getPlugin().connections.executeSQLQuery(connection -> {
-                final PreparedStatement getHashMap = connection.prepareStatement(Constants.getQuerySelectAll(Constants.TABLE_MARRY));
-                final ResultSet resultSet = getHashMap.executeQuery();
+                PreparedStatement getHashMap = connection.prepareStatement(Constants.getQuerySelectAll(Constants.TABLE_MARRY));
+                ResultSet resultSet = getHashMap.executeQuery();
                 while (resultSet.next()) {
                     final UUID uuid = UUID.fromString(resultSet.getString(Strings.UUID));
                     final UUID marryUUID = UUID.fromString(resultSet.getString(Strings.MARRY_UUID));
@@ -63,36 +60,35 @@ public class Commands extends BaseCommand {
                             resultSet.getInt(Strings.MARRY_ID)
                     ));
                 }
-                getHashMap.close();
-                resultSet.close();
 
-                final PreparedStatement getHashMaps = connection.prepareStatement(Constants.getQuerySelectAll(Constants.TABLE_BANK));
-                final ResultSet resultSets = getHashMaps.executeQuery();
-                while (resultSets.next()) {
-                    final int marryId = resultSets.getInt(Strings.MARRY_ID);
-                    final String[] split = resultSets.getString(Strings.LOC).split(":");
+                getHashMap = connection.prepareStatement(Constants.getQuerySelectAll(Constants.TABLE_BANK));
+                resultSet = getHashMap.executeQuery();
+                while (resultSet.next()) {
+                    final int marryId = resultSet.getInt(Strings.MARRY_ID);
+                    final String[] split = resultSet.getString(Strings.LOC).split(":");
                     final Location loc = new Location(Bukkit.getWorld(split[0]),
                             Double.parseDouble(split[1]),
                             (Double.parseDouble(split[2]) + 1),
                             Double.parseDouble(split[3]),
                             Float.parseFloat(split[4]),
                             Float.parseFloat(split[5]));
+
                     Vars.marrieds.put(marryId, new MarryId(
                             marryId,
-                            resultSets.getDouble(Strings.BALANCE),
-                            resultSets.getInt(Strings.HOURS),
+                            resultSet.getDouble(Strings.BALANCE),
+                            resultSet.getInt(Strings.HOURS),
                             loc,
-                            resultSets.getLong(Strings.TIME),
-                            resultSets.getLong(Strings.LAST)
+                            resultSet.getLong(Strings.TIME),
+                            resultSet.getLong(Strings.LAST)
                     ));
                 }
-                getHashMaps.close();
-                resultSets.close();
+                getHashMap.close();
+                resultSet.close();
             });
         } else {
             try {
-                final PreparedStatement getHashMap = Connections.connection.prepareStatement(Constants.getQuerySelectAll(Constants.TABLE_MARRY));
-                final ResultSet resultSet = getHashMap.executeQuery();
+                PreparedStatement getHashMap = Connections.connection.prepareStatement(Constants.getQuerySelectAll(Constants.TABLE_MARRY));
+                ResultSet resultSet = getHashMap.executeQuery();
                 while (resultSet.next()) {
                     final UUID uuid = UUID.fromString(resultSet.getString(Strings.UUID));
                     Vars.marriedUsers.put(uuid, new PlayerMarry(
@@ -103,38 +99,36 @@ public class Commands extends BaseCommand {
                             resultSet.getInt(Strings.MARRY_ID)
                     ));
                 }
-                getHashMap.close();
-                resultSet.close();
 
-                final PreparedStatement getHashMaps = Connections.connection.prepareStatement(Constants.getQuerySelectAll(Constants.TABLE_BANK));
-                final ResultSet resultSets = getHashMaps.executeQuery();
-                while (resultSets.next()) {
-                    final int marryId = resultSets.getInt(Strings.MARRY_ID);
-                    final String[] split = resultSets.getString(Strings.LOC).split(":");
+                getHashMap = Connections.connection.prepareStatement(Constants.getQuerySelectAll(Constants.TABLE_BANK));
+                resultSet = getHashMap.executeQuery();
+                while (resultSet.next()) {
+                    final int marryId = resultSet.getInt(Strings.MARRY_ID);
+                    final String[] split = resultSet.getString(Strings.LOC).split(":");
                     final Location loc = new Location(Bukkit.getWorld(split[0]),
                             Double.parseDouble(split[1]),
                             (Double.parseDouble(split[2]) + 1),
                             Double.parseDouble(split[3]),
                             Float.parseFloat(split[4]),
                             Float.parseFloat(split[5]));
+
                     Vars.marrieds.put(marryId, new MarryId(
                             marryId,
-                            resultSets.getDouble(Strings.BALANCE),
-                            resultSets.getInt(Strings.HOURS),
+                            resultSet.getDouble(Strings.BALANCE),
+                            resultSet.getInt(Strings.HOURS),
                             loc,
-                            resultSets.getLong(Strings.TIME),
-                            resultSets.getLong(Strings.LAST)
+                            resultSet.getLong(Strings.TIME),
+                            resultSet.getLong(Strings.LAST)
                     ));
                 }
-                getHashMaps.close();
-                resultSets.close();
+                getHashMap.close();
+                resultSet.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        messages.sendConsole(Strings.M_SERVER_LOAD, Constants.MODULE, "Married Users", Constants.AMOUNT, Vars.marriedUsers.size());
-        messages.sendConsole(Strings.M_SERVER_LOAD, Constants.MODULE, "Marry Accounts", Constants.AMOUNT, Vars.marrieds.size());
-
+        sendConsole(Strings.M_SERVER_LOAD.replace(Constants.MODULE, "Married Users").replace(Constants.AMOUNT, String.valueOf(Vars.marriedUsers.size())));
+        sendConsole(Strings.M_SERVER_LOAD.replace(Constants.MODULE, "Marry Accounts").replace(Constants.AMOUNT, String.valueOf(Vars.marrieds.size())));
     }
 
     @Default
@@ -145,7 +139,7 @@ public class Commands extends BaseCommand {
         final double money = EterniaMarriage.serverConfig.getDouble("money.marry");
 
         if (!economy.has(player, money)) {
-            messages.sendMessage(Strings.M_BALANCE_NO, Constants.MONEY, money, player);
+            player.sendMessage(Strings.M_BALANCE_NO.replace(Constants.MONEY, String.valueOf(money)));
             return;
         }
 
@@ -155,25 +149,25 @@ public class Commands extends BaseCommand {
         final String husbandName = husband.getName();
 
         if (wifeName.equals(husbandName)) {
-            messages.sendMessage(Strings.M_SERVER_YOUR, player);
+            player.sendMessage(Strings.M_SERVER_YOUR);
             return;
         }
 
         final UUID wifeUUID = UUIDFetcher.getUUIDOf(wifeName);
         final UUID husbandUUID = UUIDFetcher.getUUIDOf(husbandName);
         if (APIMarry.isMarried(wifeUUID) || APIMarry.isMarried(husbandUUID)) {
-            messages.sendMessage(Strings.M_MARRY_ALREADY, player);
+            player.sendMessage(Strings.M_MARRY_ALREADY);
             return;
         }
 
         if (Vars.proposesId.containsKey(wifeName) || Vars.proposesId.containsKey(husbandName)) {
-            messages.sendMessage(Strings.M_MARRY_ALREADY_SENT, player);
+            player.sendMessage(Strings.M_MARRY_ALREADY_SENT);
             return;
         }
 
-        messages.broadcastMessage(Strings.M_MARRY_ADVICE, Constants.PLAYER, wife.getDisplayName(), Constants.TARGET, husband.getDisplayName());
-        messages.sendMessage(Strings.M_MARRY_SENT, Constants.PLAYER, wife.getDisplayName(), Constants.TARGET, husband.getDisplayName(), wife);
-        messages.sendMessage(Strings.M_MARRY_SENT, Constants.PLAYER, husband.getDisplayName(), Constants.TARGET, wife.getDisplayName(), husband);
+        Bukkit.broadcastMessage(Strings.M_MARRY_ADVICE.replace(Constants.PLAYER, wife.getDisplayName()).replace(Constants.TARGET, husband.getDisplayName()));
+        wife.sendMessage(Strings.M_MARRY_SENT.replace(Constants.PLAYER, wife.getDisplayName()).replace(Constants.TARGET, husband.getDisplayName()));
+        husband.sendMessage(Strings.M_MARRY_SENT.replace(Constants.PLAYER, husband.getDisplayName()).replace(Constants.TARGET, wife.getDisplayName()));
 
         economy.withdrawPlayer(player, money);
         Vars.marryProposes.put(marryNumber, new PlayerMarryPropose(wifeUUID, husbandUUID));
@@ -188,7 +182,7 @@ public class Commands extends BaseCommand {
         plugin.getFiles().loadConfigs();
         plugin.getFiles().loadDatabase();
         plugin.getFiles().loadMessages();
-        messages.sendMessage(Strings.M_SERVER_RELOAD, player);
+        player.sendMessage(Strings.M_SERVER_RELOAD);
     }
 
     @Subcommand("divorce")
@@ -205,7 +199,7 @@ public class Commands extends BaseCommand {
                     return;
                 }
             }
-            messages.sendMessage(Strings.M_MARRY_NO, player);
+            player.sendMessage(Strings.M_MARRY_NO);
         });
     }
 
@@ -219,17 +213,17 @@ public class Commands extends BaseCommand {
             playerMarryPropose.setMarryAccept();
 
             if (playerMarryPropose.getMarryAccept()) {
-                messages.broadcastMessage(Strings.M_MARRY_SUCESS, Constants.TARGET, playerMarryPropose.getHusbandDisplayName(), Constants.PLAYER, playerMarryPropose.getWifeDisplayName());
+                Bukkit.broadcastMessage(Strings.M_MARRY_SUCESS.replace(Constants.TARGET,playerMarryPropose.getHusbandDisplayName()).replace(Constants.PLAYER, playerMarryPropose.getWifeDisplayName()));
                 marrySucess(playerMarryPropose);
                 Vars.proposesId.remove(Vars.marryProposes.get(id).getHusbandName());
                 Vars.proposesId.remove(Vars.marryProposes.get(id).getWifeName());
                 Vars.marryProposes.remove(id);
             } else {
                 Vars.marryProposes.put(id, playerMarryPropose);
-                messages.broadcastMessage(Strings.M_MARRY_ACCEPT, Constants.PLAYER, player.getDisplayName());
+                Bukkit.broadcastMessage(Strings.M_MARRY_SUCESS.replace(Constants.PLAYER, player.getDisplayName()));
             }
         }else {
-            messages.sendMessage(Strings.M_MARRY_PROPOSAL, player);
+            player.sendMessage(Strings.M_MARRY_PROPOSAL);
         }
     }
 
@@ -241,9 +235,9 @@ public class Commands extends BaseCommand {
             Vars.proposesId.remove(Vars.marryProposes.get(id).getHusbandName());
             Vars.proposesId.remove(Vars.marryProposes.get(id).getWifeName());
             Vars.marryProposes.remove(id);
-            messages.broadcastMessage(Strings.M_MARRY_DENY, Constants.PLAYER, player.getDisplayName());
+            Bukkit.broadcastMessage(Strings.M_MARRY_DENY.replace(Constants.PLAYER, player.getDisplayName()));
         } else {
-            messages.sendMessage(Strings.M_MARRY_PROPOSAL, player);
+            player.sendMessage(Strings.M_MARRY_PROPOSAL);
         }
     }
 
@@ -256,15 +250,15 @@ public class Commands extends BaseCommand {
                 if (economy.has(player, amount)) {
                     APIMarry.giveMarryBankMoney(APIMarry.getMarryId(uuid), amount);
                     economy.withdrawPlayer(player, amount);
-                    messages.sendMessage(Strings.M_COMMANDS_DEPOSIT, Constants.AMOUNT, amount, player);
+                    player.sendMessage(Strings.M_COMMANDS_DEPOSIT.replace(Constants.AMOUNT, String.valueOf(amount)));
                 } else {
-                    messages.sendMessage(Strings.M_NO_BAL, player);
+                    player.sendMessage(Strings.M_NO_BAL);
                 }
             } else {
-                messages.sendMessage(Strings.M_NO_MONEY, player);
+                player.sendMessage(Strings.M_NO_MONEY);
             }
         } else {
-            messages.sendMessage(Strings.M_COMMANDS_NO_MARRY, player);
+            player.sendMessage(Strings.M_COMMANDS_NO_MARRY);
         }
     }
 
@@ -279,10 +273,10 @@ public class Commands extends BaseCommand {
                     giveItem(player, partner, itemStack);
                 }
             } else {
-                messages.sendMessage(Strings.M_COMMANDS_OFFLINE, player);
+                player.sendMessage(Strings.M_COMMANDS_OFFLINE);
             }
         } else {
-            messages.sendMessage(Strings.M_COMMANDS_NO_MARRY, player);
+            player.sendMessage(Strings.M_COMMANDS_NO_MARRY);
         }
     }
 
@@ -296,15 +290,15 @@ public class Commands extends BaseCommand {
                 if (APIMarry.getMarryMoney(id) >= amount) {
                     APIMarry.removeMarryBankMoney(id, amount);
                     economy.depositPlayer(player, amount);
-                    messages.sendMessage(Strings.M_COMMANDS_DEPOSIT, Constants.AMOUNT, amount, player);
+                    player.sendMessage(Strings.M_COMMANDS_DEPOSIT.replace(Constants.AMOUNT, String.valueOf(amount)));
                 } else {
-                    messages.sendMessage(Strings.M_COMMANDS_NO_MONEY, Constants.MONEY, amount, player);
+                    player.sendMessage(Strings.M_COMMANDS_NO_MONEY.replace(Constants.MONEY, String.valueOf(amount)));
                 }
             } else {
-                messages.sendMessage(Strings.M_NO_MONEY, player);
+                player.sendMessage(Strings.M_NO_MONEY);
             }
         } else {
-            messages.sendMessage(Strings.M_COMMANDS_NO_MARRY, player);
+            player.sendMessage(Strings.M_COMMANDS_NO_MARRY);
         }
     }
 
@@ -316,10 +310,10 @@ public class Commands extends BaseCommand {
             if (location != error) {
                 Vars.teleports.put(player, new PlayerTeleport(player, location, Strings.M_COMMANDS_DONE));
             } else {
-                messages.sendMessage(Strings.M_COMMANDS_NO_HOME, player);
+                player.sendMessage(Strings.M_COMMANDS_NO_HOME);
             }
         } else {
-            messages.sendMessage(Strings.M_COMMANDS_NO_MARRY, player);
+            player.sendMessage(Strings.M_COMMANDS_NO_MARRY);
         }
     }
 
@@ -347,12 +341,12 @@ public class Commands extends BaseCommand {
                 Vars.marrieds.put(id, marryId);
 
                 EQueries.executeQuery(Constants.getQueryUpdate(Constants.TABLE_BANK, Strings.LOC, saveloc, Strings.MARRY_ID, id), false);
-                messages.sendMessage(Strings.M_COMMANDS_HOME_SAVE, Constants.MONEY, setHomeCost, player);
+                player.sendMessage(Strings.M_COMMANDS_HOME_SAVE.replace(Constants.MONEY, String.valueOf(setHomeCost)));
             } else {
-                messages.sendMessage(Strings.M_COMMANDS_NO_MONEY, Constants.MONEY, setHomeCost, player);
+                player.sendMessage(Strings.M_COMMANDS_NO_MONEY.replace(Constants.MONEY, String.valueOf(setHomeCost)));
             }
         } else {
-            messages.sendMessage(Strings.M_COMMANDS_NO_MARRY, player);
+            player.sendMessage(Strings.M_COMMANDS_NO_MARRY);
         }
     }
 
@@ -407,5 +401,8 @@ public class Commands extends BaseCommand {
         Vars.marriedUsers.remove(husbandUUID);
     }
 
+    private void sendConsole(String msg) {
+        Bukkit.getConsoleSender().sendMessage(msg);
+    }
 
 }

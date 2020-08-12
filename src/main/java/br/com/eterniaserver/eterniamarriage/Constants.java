@@ -6,6 +6,11 @@ public class Constants {
         throw new IllegalStateException("Utility class");
     }
 
+    public static void reloadConfig() {
+        TABLE_MARRY = EterniaMarriage.serverConfig.getString("sql.table-marry");
+        TABLE_BANK = EterniaMarriage.serverConfig.getString("sql.table-bank");
+    }
+
     public static final String PLAYER = "%player_displayname%";
     public static final String TARGET = "%target_displayname%";
     public static final String MODULE = "%module%";
@@ -13,8 +18,8 @@ public class Constants {
     public static final String MONEY = "%money%";
     public static final String COOLDOWN = "%cooldown%";
 
-    public static final String TABLE_MARRY = EterniaMarriage.serverConfig.getString("sql.table-marry");
-    public static final String TABLE_BANK = EterniaMarriage.serverConfig.getString("sql.table-bank");
+    public static String TABLE_MARRY;
+    public static String TABLE_BANK;
 
     public static String getQueryCreateTable(final String table, final String values) {
         return "CREATE TABLE IF NOT EXISTS " + table + " " + values + ";";

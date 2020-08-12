@@ -15,11 +15,11 @@ public class OnMcMMOPlayerXpGain implements Listener {
     public void onGainXp(McMMOPlayerXpGainEvent event) {
         final Player player = event.getPlayer();
         final String playerName = player.getName();
-        if (APIMarry.isMarried(UUIDFetcher.getUUIDOf(playerName))) {
-            if (APIMarry.isCloseToPartner(player)) {
-                event.setRawXpGained((float) (event.getRawXpGained() * 1.25));
-            }
-        }
+
+        if (!APIMarry.isMarried(UUIDFetcher.getUUIDOf(playerName))) return;
+        if (!APIMarry.isCloseToPartner(player)) return;
+
+        event.setRawXpGained((float) (event.getRawXpGained() * 1.25));
     }
 
 }

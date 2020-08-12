@@ -1,6 +1,5 @@
 package br.com.eterniaserver.eterniamarriage;
 
-import br.com.eterniaserver.eternialib.EFiles;
 import br.com.eterniaserver.eternialib.EterniaLib;
 import br.com.eterniaserver.eterniamarriage.dependencies.eternialib.Files;
 import br.com.eterniaserver.eterniamarriage.generics.*;
@@ -15,7 +14,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class EterniaMarriage extends JavaPlugin {
 
-    private EFiles messages;
     private Files files;
 
     public static final FileConfiguration serverConfig = new YamlConfiguration();
@@ -32,15 +30,13 @@ public class EterniaMarriage extends JavaPlugin {
         files.loadMessages();
         files.loadDatabase();
 
-        messages = new EFiles(msgConfig);
-
         vault();
 
         EterniaLib.getManager().registerCommand(new Commands(this));
 
         this.getServer().getPluginManager().registerEvents(new Events(), this);
         this.getServer().getPluginManager().registerEvents(new OnMcMMOPlayerXpGain(), this);
-        this.getServer().getScheduler().runTaskTimer(this, new Checks(this), 0L, 20L);
+        this.getServer().getScheduler().runTaskTimer(this, new Checks(), 0L, 20L);
 
         new PlaceHolders().register();
 
@@ -48,10 +44,6 @@ public class EterniaMarriage extends JavaPlugin {
 
     public Files getFiles() {
         return files;
-    }
-
-    public EFiles getEFiles() {
-        return messages;
     }
 
     public Economy getEcon() {

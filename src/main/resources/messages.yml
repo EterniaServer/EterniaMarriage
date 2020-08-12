@@ -19,7 +19,7 @@ server:
 marry:
   already-proposal: '&7Um dos jogadores já tem um pedido de casamento&8, &7rejeite-o antes de fazer um novo pedido&8.'
   already-sent: '&7Esse jogador já tem um pedido de casamento em andamento&8.'
-  send-proposal: "&7Você, &3%player_displayname%&8, &7aceita se casar com &3%target_displayname%&8?\n&7Use&8: &6/marry accept &7para aceitar ou &6/marry deny &7para negar&8."
+  send-proposal: "&7Você, &3%player_displayname%&8, &7aceita se casar com &3%target_displayname%&8?\n&8[&aE&9S&8] &7Use&8: &6/marry accept &7para aceitar ou &6/marry deny &7para negar&8."
   advice: '&3%player_displayname% &7e &3%target_displayname% &7estão se casando&8!'
   accept: '&3%player_displayname% &7aceitou&8!'
   deny: '&7Que triste&8... &3%player_displayname% &7negou o pedido&8.'

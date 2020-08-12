@@ -1,9 +1,7 @@
 package br.com.eterniaserver.eterniamarriage.generics;
 
-import br.com.eterniaserver.eternialib.EFiles;
 import br.com.eterniaserver.eternialib.UUIDFetcher;
 import br.com.eterniaserver.eterniamarriage.Constants;
-import br.com.eterniaserver.eterniamarriage.EterniaMarriage;
 import br.com.eterniaserver.eterniamarriage.Strings;
 import br.com.eterniaserver.eterniamarriage.objects.PlayerTeleport;
 import br.com.eterniaserver.paperlib.PaperLib;
@@ -15,12 +13,6 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class Checks implements Runnable {
-
-    private final EFiles messages;
-
-    public Checks(EterniaMarriage plugin) {
-        this.messages = plugin.getEFiles();
-    }
 
     @Override
     public void run() {
@@ -38,6 +30,7 @@ public class Checks implements Runnable {
 
     private void getHealthRegen(Player player) {
         if (APIMarry.isCloseToPartner(player)) {
+            if (player.isDead()) return;
             final double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
             final double health = player.getHealth();
             if (health < maxHealth) {
@@ -56,19 +49,19 @@ public class Checks implements Runnable {
                 if (!playerTeleport.hasMoved()) {
                     if (playerTeleport.getCountdown() == 0) {
                         PaperLib.teleportAsync(player, playerTeleport.getWantLocation());
-                        messages.sendMessage(playerTeleport.getMessage(), player);
+                        player.sendMessage(playerTeleport.getMessage());
                         Vars.teleports.remove(player);
                     } else {
-                        messages.sendMessage(Strings.M_SERVER_TIMING, Constants.COOLDOWN, playerTeleport.getCountdown(), player);
+                        player.sendMessage(Strings.M_SERVER_TIMING.replace(Constants.COOLDOWN, String.valueOf(playerTeleport.getCountdown())));
                         playerTeleport.decreaseCountdown();
                     }
                 } else {
-                    messages.sendMessage(Strings.M_SERVER_MOVE, player);
+                    player.sendMessage(Strings.M_SERVER_MOVE);
                     Vars.teleports.remove(player);
                 }
             } else {
                 PaperLib.teleportAsync(player, playerTeleport.getWantLocation());
-                messages.sendMessage(playerTeleport.getMessage(), player);
+                player.sendMessage(playerTeleport.getMessage());
                 Vars.teleports.remove(player);
             }
         }

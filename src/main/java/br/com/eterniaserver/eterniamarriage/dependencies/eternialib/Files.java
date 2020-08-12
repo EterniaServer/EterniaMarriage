@@ -1,10 +1,12 @@
 package br.com.eterniaserver.eterniamarriage.dependencies.eternialib;
 
-import br.com.eterniaserver.eternialib.EFiles;
+import br.com.eterniaserver.eterniamarriage.Constants;
 import br.com.eterniaserver.eterniamarriage.EterniaMarriage;
+import br.com.eterniaserver.eterniamarriage.Strings;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 
+import java.io.File;
 import java.io.IOException;
 
 public class Files {
@@ -17,8 +19,13 @@ public class Files {
 
     public void loadConfigs() {
 
+        final String messages = "config.yml";
+
+        final File file = new File(plugin.getDataFolder(), messages);
+        if (!file.exists()) plugin.saveResource(messages, false);
+
         try {
-            EterniaMarriage.serverConfig.load(EFiles.fileLoad(plugin, "config.yml"));
+            EterniaMarriage.serverConfig.load(file);
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
@@ -27,8 +34,14 @@ public class Files {
 
     public void loadMessages() {
 
+        final String messages = "messages.yml";
+
+        final File file = new File(plugin.getDataFolder(), messages);
+        if (!file.exists()) plugin.saveResource(messages, false);
+
         try {
-            EterniaMarriage.msgConfig.load(EFiles.fileLoad(plugin, "messages.yml"));
+            EterniaMarriage.msgConfig.load(file);
+            Strings.reloadConfig(EterniaMarriage.msgConfig);
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
@@ -37,6 +50,7 @@ public class Files {
 
     public void loadDatabase() {
 
+        Constants.reloadConfig();
         new Table();
 
     }

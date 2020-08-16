@@ -33,8 +33,6 @@ import java.util.concurrent.CompletableFuture;
 @CommandPermission("eternia.marry")
 public class Commands extends BaseCommand {
 
-    private int marryNumber = 0;
-
     private final Economy economy;
     private final EterniaMarriage plugin;
     private final ItemStack air = new ItemStack(Material.AIR);
@@ -111,7 +109,6 @@ public class Commands extends BaseCommand {
                             Double.parseDouble(split[3]),
                             Float.parseFloat(split[4]),
                             Float.parseFloat(split[5]));
-
                     Vars.marrieds.put(marryId, new MarryId(
                             marryId,
                             resultSet.getDouble(Strings.BALANCE),
@@ -168,10 +165,9 @@ public class Commands extends BaseCommand {
         husband.sendMessage(Strings.M_MARRY_SENT.replace(Constants.PLAYER, husband.getDisplayName()).replace(Constants.TARGET, wife.getDisplayName()));
 
         economy.withdrawPlayer(player, money);
-        Vars.marryProposes.put(marryNumber, new PlayerMarryPropose(wifeUUID, husbandUUID));
-        Vars.proposesId.put(wifeName, marryNumber);
-        Vars.proposesId.put(husbandName, marryNumber);
-        marryNumber++;
+        Vars.marryProposes.put(Vars.marrieds.size() + 1, new PlayerMarryPropose(wifeUUID, husbandUUID));
+        Vars.proposesId.put(wifeName, Vars.marrieds.size() + 1);
+        Vars.proposesId.put(husbandName, Vars.marrieds.size() + 1);
     }
 
     @Subcommand("reload")
@@ -218,7 +214,7 @@ public class Commands extends BaseCommand {
                 Vars.marryProposes.remove(id);
             } else {
                 Vars.marryProposes.put(id, playerMarryPropose);
-                Bukkit.broadcastMessage(Strings.M_MARRY_SUCESS.replace(Constants.PLAYER, player.getDisplayName()));
+                Bukkit.broadcastMessage(Strings.M_MARRY_ACCEPT.replace(Constants.PLAYER, player.getDisplayName()));
             }
         }else {
             player.sendMessage(Strings.M_MARRY_PROPOSAL);
@@ -365,24 +361,20 @@ public class Commands extends BaseCommand {
 
     private void marrySucess(final PlayerMarryPropose playerMarryPropose) {
         final long time = System.currentTimeMillis();
-        Vars.marryIdList = Vars.marryIdList + 1;
-
-        final int id = Vars.marryIdList;
         EQueries.executeQuery(Constants.getQueryInsert(Constants.TABLE_BANK, "(" + Strings.MARRY_ID
                 + ", " + Strings.BALANCE
                 + ", " + Strings.HOURS
                 + ", " + Strings.LOC
                 + ", " + Strings.TIME
                 + ", " + Strings.LAST + ")", "('"
-                + id + "', '"
+                + (Vars.marrieds.size() + 1) + "', '"
                 + 0 + "', '"
                 + 0 + "', 'world:666:666:666:666:666', '"
                 + time + "', '"
                 + time + "')"));
 
-        Vars.marrieds.put(id, new MarryId(id, 0.0, 0, error, time, time));
-
-        save(playerMarryPropose, Vars.marryIdList);
+        save(playerMarryPropose, Vars.marrieds.size() + 1);
+        Vars.marrieds.put(Vars.marrieds.size() + 1, new MarryId(Vars.marrieds.size() + 1, 0.0, 0, error, time, time));
     }
 
     private void save(final PlayerMarryPropose playerMarryPropose, int id) {

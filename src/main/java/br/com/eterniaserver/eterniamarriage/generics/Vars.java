@@ -17,8 +17,6 @@ public class Vars {
         throw new IllegalStateException("Utility class");
     }
 
-    protected static int marryIdList;
-
     protected static final Map<UUID, Long> userKiss = new HashMap<>();
 
     protected static final Map<Integer, Boolean> marryOnline = new HashMap<>();

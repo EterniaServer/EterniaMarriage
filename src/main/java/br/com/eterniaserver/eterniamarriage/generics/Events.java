@@ -98,6 +98,7 @@ public class Events implements Listener {
             loc.getWorld().spawnParticle(Particle.HEART, loc, 1);
             loc.subtract(x, 1, z);
         }
+
     }
 
     private void updateTime(int id) {

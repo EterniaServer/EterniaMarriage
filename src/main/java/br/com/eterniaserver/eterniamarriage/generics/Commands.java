@@ -46,7 +46,7 @@ public class Commands extends BaseCommand {
         this.economy = plugin.getEcon();
 
         if (EterniaLib.getMySQL()) {
-            EterniaLib.getPlugin().connections.executeSQLQuery(connection -> {
+            EterniaLib.getConnections().executeSQLQuery(connection -> {
                 PreparedStatement getHashMap = connection.prepareStatement(Constants.getQuerySelectAll(Constants.TABLE_MARRY));
                 ResultSet resultSet = getHashMap.executeQuery();
                 while (resultSet.next()) {
@@ -86,9 +86,7 @@ public class Commands extends BaseCommand {
                 resultSet.close();
             });
         } else {
-            try {
-                PreparedStatement getHashMap = Connections.connection.prepareStatement(Constants.getQuerySelectAll(Constants.TABLE_MARRY));
-                ResultSet resultSet = getHashMap.executeQuery();
+            try (PreparedStatement getHashMap = Connections.getSQLite().prepareStatement(Constants.getQuerySelectAll(Constants.TABLE_MARRY)); ResultSet resultSet = getHashMap.executeQuery()) {
                 while (resultSet.next()) {
                     final UUID uuid = UUID.fromString(resultSet.getString(Strings.UUID));
                     Vars.marriedUsers.put(uuid, new PlayerMarry(
@@ -100,8 +98,10 @@ public class Commands extends BaseCommand {
                     ));
                 }
 
-                getHashMap = Connections.connection.prepareStatement(Constants.getQuerySelectAll(Constants.TABLE_BANK));
-                resultSet = getHashMap.executeQuery();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try (PreparedStatement getHashMap = Connections.getSQLite().prepareStatement(Constants.getQuerySelectAll(Constants.TABLE_BANK)); ResultSet resultSet = getHashMap.executeQuery()) {
                 while (resultSet.next()) {
                     final int marryId = resultSet.getInt(Strings.MARRY_ID);
                     final String[] split = resultSet.getString(Strings.LOC).split(":");
@@ -121,8 +121,6 @@ public class Commands extends BaseCommand {
                             resultSet.getLong(Strings.LAST)
                     ));
                 }
-                getHashMap.close();
-                resultSet.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -262,6 +260,16 @@ public class Commands extends BaseCommand {
         }
     }
 
+    @Subcommand("balance")
+    public void onBalance(Player player) {
+        final UUID uuid = UUIDFetcher.getUUIDOf(player.getName());
+        if (APIMarry.isMarried(uuid)) {
+            player.sendMessage(Strings.M_COMMANDS_BALANCE.replace(Constants.AMOUNT, String.valueOf(Vars.marrieds.get(APIMarry.getMarryId(uuid)).getMarryBalance())));
+        } else {
+            player.sendMessage(Strings.M_COMMANDS_NO_MARRY);
+        }
+    }
+
     @Subcommand("give")
     public void onGiveItem(Player player) {
         final UUID uuid = UUIDFetcher.getUUIDOf(player.getName());
@@ -385,6 +393,8 @@ public class Commands extends BaseCommand {
                 "('" + playerMarryPropose.getHusbandUUID().toString() + "', '" + playerMarryPropose.getWifeUUID().toString() + "', '" + playerMarryPropose.getWifeName() + "', '" + playerMarryPropose.getWifeDisplayName() + "', '" + id + "')"));
 
 
+        Vars.userKiss.put(playerMarryPropose.getWifeUUID(), System.currentTimeMillis());
+        Vars.userKiss.put(playerMarryPropose.getHusbandUUID(), System.currentTimeMillis());
         Vars.marriedUsers.put(playerMarryPropose.getWifeUUID(), new PlayerMarry(playerMarryPropose.getWifeUUID(), playerMarryPropose.getHusbandUUID(), playerMarryPropose.getHusbandName(), playerMarryPropose.getHusbandDisplayName(), id));
         Vars.marriedUsers.put(playerMarryPropose.getHusbandUUID(), new PlayerMarry(playerMarryPropose.getHusbandUUID(), playerMarryPropose.getWifeUUID(), playerMarryPropose.getWifeName(), playerMarryPropose.getWifeDisplayName(), id));
     }

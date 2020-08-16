@@ -46,6 +46,7 @@ public class Strings {
         M_COMMANDS_DONE = putPrefix(msgConfig, "commands.home");
         M_COMMANDS_NO_HOME = putPrefix(msgConfig, "commands.no-home");
         M_COMMANDS_HOME_SAVE = putPrefix(msgConfig, "commands.home-save");
+        M_COMMANDS_BALANCE = putPrefix(msgConfig, "commands.balance");
     }
 
     public static String M_SERVER_PREFIX;
@@ -76,6 +77,7 @@ public class Strings {
     public static String M_COMMANDS_DONE;
     public static String M_COMMANDS_NO_HOME;
     public static String M_COMMANDS_HOME_SAVE;
+    public static String M_COMMANDS_BALANCE;
 
     private static String putPrefix(FileConfiguration msg, String path) {
         String message = msg.getString(path);

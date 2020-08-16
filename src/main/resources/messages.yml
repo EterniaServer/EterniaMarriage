@@ -28,6 +28,7 @@ marry:
   no-marry: '&7Esses jogadores(as) não são casados(as)&8.'
   already-married: '&7Um dos jogadores já é casado&8.'
 commands:
+  balance: '&7Seu casal possui &3%amount%&8.'
   no-marry: '&7Você não é casado&8.'
   deposit: '&7Você depositou &3%amount% &7no banco do casal&8.'
   receive: '&7Você sacou &3%amount% &7do banco do casal&8.'

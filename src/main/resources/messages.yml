@@ -30,6 +30,7 @@ marry:
 commands:
   balance: '&7Seu casal possui &3%amount%&8.'
   no-marry: '&7Você não é casado&8.'
+  withdraw: '&7Você retirou &3%amount% &7do banco do casal&8.'
   deposit: '&7Você depositou &3%amount% &7no banco do casal&8.'
   receive: '&7Você sacou &3%amount% &7do banco do casal&8.'
   no-money: '&7Seu casal não possui dinheiro suficiênte&8, &7você precisa de&3%money%&8.'

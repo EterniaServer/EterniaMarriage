@@ -19,8 +19,8 @@ public class Checks implements Runnable {
         for (Player player : Bukkit.getOnlinePlayers()) {
             final UUID uuid = UUIDFetcher.getUUIDOf(player.getName());
             if (APIMarry.isMarried(uuid)) {
-                final Player partner = Bukkit.getOfflinePlayer(APIMarry.getPartnerUUID(uuid)).getPlayer();
-                if (partner != null && partner.isOnline()) {
+                final Player partner = Bukkit.getPlayer(APIMarry.getPartnerUUID(uuid));
+                if (partner != null) {
                     getHealthRegen(player);
                 }
                 getPlayersInTp(player);

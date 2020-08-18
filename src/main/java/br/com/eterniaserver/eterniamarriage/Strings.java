@@ -39,6 +39,7 @@ public class Strings {
         M_MARRY_PROPOSAL = putPrefix(msgConfig, "marry.no-proposal");
         M_MARRY_DENY = putPrefix(msgConfig, "marry.deny");
         M_MARRY_SENT = putPrefix(msgConfig, "marry.send-proposal");
+        M_COMMANDS_WITHDRAW = putPrefix(msgConfig, "commands.withdraw");
         M_COMMANDS_DEPOSIT = putPrefix(msgConfig, "commands.deposit");
         M_COMMANDS_NO_MARRY = putPrefix(msgConfig, "commands.no-marry");
         M_COMMANDS_OFFLINE = putPrefix(msgConfig, "commands.offline");
@@ -71,6 +72,7 @@ public class Strings {
     public static String M_MARRY_SENT;
 
     public static String M_COMMANDS_DEPOSIT;
+    public static String M_COMMANDS_WITHDRAW;
     public static String M_COMMANDS_NO_MARRY;
     public static String M_COMMANDS_OFFLINE;
     public static String M_COMMANDS_NO_MONEY;

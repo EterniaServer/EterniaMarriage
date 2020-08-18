@@ -294,7 +294,7 @@ public class Commands extends BaseCommand {
                 if (APIMarry.getMarryMoney(id) >= amount) {
                     APIMarry.removeMarryBankMoney(id, amount);
                     economy.depositPlayer(player, amount);
-                    player.sendMessage(Strings.M_COMMANDS_DEPOSIT.replace(Constants.AMOUNT, String.valueOf(amount)));
+                    player.sendMessage(Strings.M_COMMANDS_WITHDRAW.replace(Constants.AMOUNT, String.valueOf(amount)));
                 } else {
                     player.sendMessage(Strings.M_COMMANDS_NO_MONEY.replace(Constants.MONEY, String.valueOf(amount)));
                 }

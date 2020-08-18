@@ -34,7 +34,7 @@ public class Events implements Listener {
         if (!Vars.marriedUsers.containsKey(uuid)) return;
 
         final PlayerMarry playerMarry = Vars.marriedUsers.get(Vars.marriedUsers.get(uuid).getMarryUUID());
-        final Player partner = Bukkit.getOfflinePlayer(playerMarry.getUuid()).getPlayer();
+        final Player partner = Bukkit.getPlayer(playerMarry.getUuid());
 
         if (!playerMarry.getMarryName().equals(playerName)) {
             playerMarry.setMarryName(playerName);
@@ -46,7 +46,7 @@ public class Events implements Listener {
         }
 
 
-        if (partner != null && partner.isOnline()) {
+        if (partner != null) {
             final int id = playerMarry.getMarryId();
             final MarryId marryId = Vars.marrieds.get(id);
             marryId.setMarryLast(time);
@@ -70,9 +70,9 @@ public class Events implements Listener {
         if (!Vars.marriedUsers.containsKey(uuid)) return;
 
         final PlayerMarry playerMarry = Vars.marriedUsers.get(uuid);
-        final Player partner = Bukkit.getOfflinePlayer(playerMarry.getMarryUUID()).getPlayer();
+        final Player partner = Bukkit.getPlayer(playerMarry.getMarryUUID());
 
-        if (partner != null && partner.isOnline()) {
+        if (partner != null) {
             final int id = playerMarry.getMarryId();
             updateTime(id);
             Vars.marryOnline.put(id, false);
@@ -87,7 +87,7 @@ public class Events implements Listener {
 
         if (!(event.getRightClicked() instanceof Player)) return;
         if (!player.isSneaking()) return;
-        if (TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - Vars.userKiss.get(uuid)) > 30) return;
+        if (TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - Vars.userKiss.get(uuid)) < 30) return;
         if (!(APIMarry.isMarried(uuid) && APIMarry.isReallyClose(player))) return;
 
         Location loc = player.getLocation();

@@ -1,86 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="EntryPointsManager">
-    <entry_points version="2.0">
-      <entry_point TYPE="field" FQNAME="br.com.eterniaserver.eterniamarriage.Strings MARRY_BANK" />
-      <entry_point TYPE="field" FQNAME="br.com.eterniaserver.eterniamarriage.Strings MARRY_TIME" />
-      <entry_point TYPE="field" FQNAME="br.com.eterniaserver.eterniamarriage.Strings PNAME" />
-    </entry_points>
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Checks" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Checks" method="Checks" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="Commands" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.EterniaMarriage" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.dependencies.eternialib.Files" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.dependencies.eternialib.Files" method="Files" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.MarryTime" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.OnMcMMOPlayerXpGain" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.PlaceHolders" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onAccept" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onDeny" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onDeposit" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onDivorce" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.OnMcMMOPlayerXpGain" method="onGainXp" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onGiveItem" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onHome" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onMarry" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onReload" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onSetHome" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Commands" method="onWithdraw" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.dependencies.papi.PAPI" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.dependencies.papi.PAPI" method="PAPI" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.PlayerTeleport" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.PlayerTeleport" method="PlayerTeleport" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.dependencies.eternialib.Table" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.dependencies.eternialib.Table" method="Table" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Events" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Events" method="onPlayerJoin" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Events" method="onPlayerLeave" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.Strings" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.APIMarry" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.APIMarry" method="getPartnerDisplay" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.APIMarry" method="getPartnerName" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generic.Events" method="onAsyncPlayerPreLogin" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.Strings" method="Strings" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.APIMarry" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Commands" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Events" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.objects.MarryId" method="getMarryDone" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.APIMarry" method="giveMarryBankMoney" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.objects.MarryId" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Commands" method="onAccept" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Events" method="onAsyncPlayerPreLogin" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Commands" method="onDeny" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Commands" method="onDeposit" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Commands" method="onDivorce" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.OnMcMMOPlayerXpGain" method="onGainXp" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Commands" method="onGiveItem" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Commands" method="onHome" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Commands" method="onMarry" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.OnMcMMOPlayerXpGain" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Events" method="onPlayerJoin" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Events" method="onPlayerLeave" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Commands" method="onReload" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Commands" method="onSetHome" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Commands" method="onWithdraw" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.objects.PlayerMarry" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.APIMarry" method="removeMarryBankMoney" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.objects.MarryId" method="setMarryDone" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.objects.PlayerMarry" method="setMarryId" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.objects.PlayerMarry" method="setMarryUUID" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.objects.PlayerMarry" method="setUuid" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.APIMarry" method="APIMarry" />
-    <pattern value="br.com.eterniaserver.eterniamarriage.generics.Events" method="onPlayerInteractEntity" />
-  </component>
-  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
+        <option value="$PROJECT_DIR$/dependency-reduced-pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/out" />
-  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

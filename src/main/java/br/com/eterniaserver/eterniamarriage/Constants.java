@@ -1,14 +1,16 @@
 package br.com.eterniaserver.eterniamarriage;
 
+import java.io.File;
+
+import org.bukkit.command.CommandSender;
+
+import br.com.eterniaserver.eterniamarriage.enums.Messages;
+import br.com.eterniaserver.eterniamarriage.enums.Strings;
+
 public class Constants {
 
     private Constants() {
         throw new IllegalStateException("Utility class");
-    }
-
-    public static void reloadConfig() {
-        TABLE_MARRY = EterniaMarriage.serverConfig.getString("sql.table-marry");
-        TABLE_BANK = EterniaMarriage.serverConfig.getString("sql.table-bank");
     }
 
     public static final String PLAYER = "%player_displayname%";
@@ -18,27 +20,30 @@ public class Constants {
     public static final String MONEY = "%money%";
     public static final String COOLDOWN = "%cooldown%";
 
-    public static String TABLE_MARRY;
-    public static String TABLE_BANK;
+    public static final String DATA_LAYER_FOLDER_PATH = "plugins" + File.separator + "EterniaMarriage";
+    public static final String CONFIG_FILE_PATH = DATA_LAYER_FOLDER_PATH + File.separator + "config.yml";
+    public static final String MESSAGES_FILE_PATH = DATA_LAYER_FOLDER_PATH + File.separator + "messages.yml";
 
-    public static String getQueryCreateTable(final String table, final String values) {
-        return "CREATE TABLE IF NOT EXISTS " + table + " " + values + ";";
+    protected void sendMessage(CommandSender sender, Messages messagesId, String... args) {
+        sendMessage(sender, messagesId, true, args);
     }
 
-    public static String getQuerySelectAll(final String table)   {
-        return "SELECT * FROM " + table + ";";
+    protected static void sendMessage(CommandSender sender, Messages messagesId, boolean prefix, String... args) {
+        sender.sendMessage(EterniaMarriage.getMessage(messagesId, prefix, args));
     }
 
-    public static String getQueryDelete(final String table, final String type, final String value) {
-        return "DELETE FROM " + table + " WHERE " + type + "='" + value + "';";
-    }
+    protected static String getMessage(Messages messagesId, boolean prefix, String[] messages, String... args) {
+        String message = messages[messagesId.ordinal()];
 
-    public static String getQueryUpdate(final String table, final String type, final Object value, final String type2, final Object value2) {
-        return "UPDATE " + table + " SET " + type + "='" + value + "' WHERE " + type2 + "='" + value2 + "';";
-    }
+        for (int i = 0; i < args.length; i++) {
+            message = message.replace("{" + i + "}", args[i]);
+        }
 
-    public static String getQueryInsert(final String table, final String type, final Object value) {
-        return "INSERT INTO " + table + " " + type + " VALUES " + value + ";";
+        if (prefix) {
+            return EterniaMarriage.getString(Strings.SERVER_PREFIX) + message;
+        }
+
+        return message;
     }
 
 }

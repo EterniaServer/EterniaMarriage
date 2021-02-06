@@ -7,6 +7,8 @@ import java.util.UUID;
 
 public class PlayerMarryPropose {
 
+    public long time;
+
     private Boolean marryAccept;
     private final UUID wifeUUID;
     private final String wifeName;

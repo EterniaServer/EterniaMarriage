@@ -1,6 +1,7 @@
 package br.com.eterniaserver.eterniamarriage.objects;
 
 import br.com.eterniaserver.eterniamarriage.EterniaMarriage;
+import br.com.eterniaserver.eterniamarriage.enums.Doubles;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -18,7 +19,7 @@ public class PlayerTeleport {
         this.firstLocation = player.getLocation();
         this.wantLocation = wantLocation;
         this.message = message;
-        this.cooldown = EterniaMarriage.serverConfig.getInt("server.cooldown");
+        this.cooldown = (int) EterniaMarriage.getDouble(Doubles.SERVER_COOLDOWN);
     }
 
     public boolean hasMoved() {

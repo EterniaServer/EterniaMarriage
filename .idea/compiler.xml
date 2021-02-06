@@ -9,5 +9,9 @@
         <module name="EterniaMarriage" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="EterniaMarriage" target="11" />
+      <module name="EterniaMarriage (2)" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

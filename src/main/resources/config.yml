@@ -6,9 +6,9 @@
 # |_______|    |__|     |_______|| _| `._____||__| \__| |__| /__/     \__\
 
 sql:
-  table-cache: 'es_marry_cache'
-  table-marry: 'es_marry_players'
-  table-bank: 'es_marry_ids'
+  table-marry: 'em_players'
+  table-bank: 'em_ids'
+  table-religion: 'em_religion'
 
 placeholders:
   isclose: '&3Perto'

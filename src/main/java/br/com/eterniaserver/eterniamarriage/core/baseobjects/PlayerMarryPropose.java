@@ -1,4 +1,4 @@
-package br.com.eterniaserver.eterniamarriage.objects;
+package br.com.eterniaserver.eterniamarriage.core.baseobjects;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

@@ -1,8 +1,8 @@
 package br.com.eterniaserver.eterniamarriage.core;
 
 import br.com.eterniaserver.eterniamarriage.EterniaMarriage;
-import br.com.eterniaserver.eterniamarriage.enums.Messages;
-import br.com.eterniaserver.eterniamarriage.objects.PlayerTeleport;
+import br.com.eterniaserver.eterniamarriage.core.enums.Messages;
+import br.com.eterniaserver.eterniamarriage.core.baseobjects.PlayerTeleport;
 import br.com.eterniaserver.paperlib.PaperLib;
 
 import org.bukkit.Bukkit;
@@ -13,14 +13,22 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class Checks extends BukkitRunnable {
+public class Tick extends BukkitRunnable {
+
+    private final EterniaMarriage plugin;
+    private final Manager manager;
+
+    public Tick(final EterniaMarriage plugin, final Manager manager) {
+        this.plugin = plugin;
+        this.manager = manager;
+    }
 
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             final UUID uuid = player.getUniqueId();
-            if (APIMarry.isMarried(uuid)) {
-                final Player partner = Bukkit.getPlayer(APIMarry.getPartnerUUID(uuid));
+            if (plugin.marriedUsers.containsKey(uuid)) {
+                final Player partner = Bukkit.getPlayer(manager.getPartnerUUID(uuid));
                 if (partner != null) {
                     getHealthRegen(player);
                 }
@@ -31,21 +39,21 @@ public class Checks extends BukkitRunnable {
     }
 
     private void checkPlayers() {
-        Vars.marryProposes.forEach((k, v) -> {
+        plugin.marryProposes.forEach((k, v) -> {
             if (TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - v.time) > 15) {
-                Vars.marryProposes.remove(k);
-                Bukkit.broadcastMessage(EterniaMarriage.getMessage(Messages.MARRY_TIMEOUT, true));
+                plugin.marryProposes.remove(k);
+                Bukkit.broadcastMessage(plugin.getMessage(Messages.MARRY_TIMEOUT, true));
             }
         });
-        Vars.invited.forEach((k, v) -> {
+        plugin.invited.forEach((k, v) -> {
             if (TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - v.time) > 30) {
-                Vars.invited.remove(k);
+                plugin.invited.remove(k);
             }
         });
     }
 
     private void getHealthRegen(Player player) {
-        if (APIMarry.isCloseToPartner(player)) {
+        if (manager.isCloseToPartner(player)) {
             if (player.isDead()) return;
             final double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
             final double health = player.getHealth();
@@ -59,26 +67,26 @@ public class Checks extends BukkitRunnable {
 
 
     private void getPlayersInTp(final Player player) {
-        if (Vars.teleports.containsKey(player)) {
-            final PlayerTeleport playerTeleport = Vars.teleports.get(player);
+        if (plugin.teleports.containsKey(player)) {
+            final PlayerTeleport playerTeleport = plugin.teleports.get(player);
             if (!player.hasPermission("eternia.timing.bypass")) {
                 if (!playerTeleport.hasMoved()) {
                     if (playerTeleport.getCountdown() == 0) {
                         PaperLib.teleportAsync(player, playerTeleport.getWantLocation());
                         player.sendMessage(playerTeleport.getMessage());
-                        Vars.teleports.remove(player);
+                        plugin.teleports.remove(player);
                     } else {
-                        EterniaMarriage.sendMessage(player, Messages.SERVER_TIMING, String.valueOf(playerTeleport.getCountdown()));
+                        plugin.sendMessage(player, Messages.SERVER_TIMING, String.valueOf(playerTeleport.getCountdown()));
                         playerTeleport.decreaseCountdown();
                     }
                 } else {
-                    EterniaMarriage.sendMessage(player, Messages.SERVER_MOVE);
-                    Vars.teleports.remove(player);
+                    plugin.sendMessage(player, Messages.SERVER_MOVE);
+                    plugin.teleports.remove(player);
                 }
             } else {
                 PaperLib.teleportAsync(player, playerTeleport.getWantLocation());
                 player.sendMessage(playerTeleport.getMessage());
-                Vars.teleports.remove(player);
+                plugin.teleports.remove(player);
             }
         }
     }

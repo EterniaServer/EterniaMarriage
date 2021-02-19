@@ -1,84 +1,96 @@
 package br.com.eterniaserver.eterniamarriage;
 
-import br.com.eterniaserver.eternialib.CommandManager;
-import br.com.eterniaserver.eterniamarriage.dependencies.ConfigsCfg;
-import br.com.eterniaserver.eterniamarriage.dependencies.PlaceHolders;
-import br.com.eterniaserver.eterniamarriage.dependencies.eternialib.Tables;
-import br.com.eterniaserver.eterniamarriage.enums.Doubles;
-import br.com.eterniaserver.eterniamarriage.enums.Messages;
-import br.com.eterniaserver.eterniamarriage.enums.Strings;
+import br.com.eterniaserver.eternialib.EterniaLib;
+import br.com.eterniaserver.eterniamarriage.configurations.ConfigsCfg;
+import br.com.eterniaserver.eterniamarriage.configurations.MessagesCfg;
+import br.com.eterniaserver.eterniamarriage.core.baseobjects.MarryId;
+import br.com.eterniaserver.eterniamarriage.core.baseobjects.PlayerMarry;
+import br.com.eterniaserver.eterniamarriage.core.baseobjects.PlayerMarryPropose;
+import br.com.eterniaserver.eterniamarriage.core.baseobjects.PlayerTeleport;
+import br.com.eterniaserver.eterniamarriage.core.baseobjects.Religion;
+import br.com.eterniaserver.eterniamarriage.core.baseobjects.ReligionInvite;
+import br.com.eterniaserver.eterniamarriage.core.enums.Doubles;
+import br.com.eterniaserver.eterniamarriage.core.enums.Messages;
+import br.com.eterniaserver.eterniamarriage.core.enums.Strings;
 import br.com.eterniaserver.eterniamarriage.core.*;
 
+import br.com.eterniaserver.eterniamarriage.handlers.McMMOHandler;
+import br.com.eterniaserver.eterniamarriage.handlers.PlayerHandler;
 import net.milkbowl.vault.economy.Economy;
-
-import org.bukkit.Bukkit;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class EterniaMarriage extends JavaPlugin {
 
-    private static Economy econ;
+    private final String[] strings = new String[Strings.values().length];
+    private final String[] messages = new String[Messages.values().length];
+    private final double[] doubles = new double[Doubles.values().length];
 
-    private static final String[] stringsConfig = new String[Strings.values().length];
-    private static final Double[] doublesConfig = new Double[Doubles.values().length];
-    private static final String[] messagesConfig = new String[Messages.values().length];
+    public Economy economy;
+
+    public final Map<Integer, MarryId> marrieds = new HashMap<>();
+    public final Map<UUID, PlayerMarry> marriedUsers = new HashMap<>();
+    public final Map<UUID, Religion> religions = new HashMap<>();
+    public final Map<UUID, ReligionInvite> invited = new HashMap<>();
+    public final Map<UUID, Long> userKiss = new HashMap<>();
+    public final Map<Integer, Boolean> marryOnline = new HashMap<>();
+    public final Map<Player, PlayerTeleport> teleports = new HashMap<>();
+    public final Map<String, Integer> proposesId = new HashMap<>();
+    public final Map<Integer, PlayerMarryPropose> marryProposes = new HashMap<>();
 
     @Override
     public void onEnable() {
-
         loadConfigurations();
-        vault();
-
-        new Tables();
-
-        CommandManager.registerCommand(new MarryCommand());
-        CommandManager.registerCommand(new ReligionCommand());
-
-        this.getServer().getPluginManager().registerEvents(new Events(), this);
-        this.getServer().getPluginManager().registerEvents(new OnMcMMOPlayerXpGain(), this);
-
-        new Checks().runTaskTimer(this, 0L, 20L);
-
-        new PlaceHolders().register();
-
+        new Metrics(this, 10394);
+        new Manager(this);
     }
 
-    public static String getString(Strings enumValue) {
-        return stringsConfig[enumValue.ordinal()];
+    private void loadConfigurations() {
+        final ConfigsCfg configsCfg = new ConfigsCfg(this, strings, doubles);
+        final MessagesCfg messagesCfg = new MessagesCfg(messages);
+
+        EterniaLib.addReloadableConfiguration("eterniamarriage", "configs", configsCfg);
+        EterniaLib.addReloadableConfiguration("eterniamarriage", "messages", messagesCfg);
+
+        configsCfg.executeConfig();
+        configsCfg.executeCritical();
+        messagesCfg.executeConfig();
     }
 
-    public static double getDouble(Doubles enumValue) {
-        return doublesConfig[enumValue.ordinal()];
+    public String getString(Strings enumValue) {
+        return strings[enumValue.ordinal()];
     }
 
-    public static void loadConfigurations() {
-        new ConfigsCfg(stringsConfig, doublesConfig, messagesConfig);
+    public double getDouble(Doubles enumValue) {
+        return doubles[enumValue.ordinal()];
     }
 
-    public static String getMessage(Messages messagesId, boolean prefix, String... args) {
-        return Constants.getMessage(messagesId, prefix, messagesConfig, args);
+    public void sendMessage(final CommandSender sender, final Messages entry, final boolean prefix, final String... args) {
+        sender.sendMessage(getMessage(entry, prefix, args));
     }
 
-    public static void sendMessage(CommandSender sender, Messages messagesId, String... args) {
-        Constants.sendMessage(sender, messagesId, true, args);
+    public void sendMessage(final CommandSender sender, final Messages entry, final String... args) {
+        sender.sendMessage(getMessage(entry, true, args));
     }
 
-    public static void sendMessage(CommandSender sender, Messages messagesId, boolean prefix, String... args) {
-        Constants.sendMessage(sender, messagesId, prefix, args);
-    }
+    public String getMessage(final Messages entry, final boolean prefix, final String... args) {
+        String message = messages[entry.ordinal()];
 
-    public static Economy getEcon() {
-        return econ;
-    }
-
-    private static void vault() {
-        if (Bukkit.getServer().getPluginManager().getPlugin("Vault") != null) {
-            RegisteredServiceProvider<Economy> rsp = Bukkit.getServicesManager().getRegistration(Economy.class);
-            if (rsp != null) {
-                econ = rsp.getProvider();
-            }
+        for (int i = 0; i < args.length; i++) {
+            message = message.replace("{" + i + "}", args[i]);
         }
+
+        if (prefix) {
+            return getString(Strings.SERVER_PREFIX) + message;
+        }
+
+        return message;
     }
 
 }

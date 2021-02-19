@@ -1,4 +1,4 @@
-package br.com.eterniaserver.eterniamarriage.enums;
+package br.com.eterniaserver.eterniamarriage.core.enums;
 
 public enum Strings {
     

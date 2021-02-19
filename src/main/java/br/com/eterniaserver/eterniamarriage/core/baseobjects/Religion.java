@@ -1,4 +1,4 @@
-package br.com.eterniaserver.eterniamarriage.objects;
+package br.com.eterniaserver.eterniamarriage.core.baseobjects;
 
 public class Religion {
     

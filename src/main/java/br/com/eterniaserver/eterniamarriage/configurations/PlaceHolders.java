@@ -1,9 +1,9 @@
-package br.com.eterniaserver.eterniamarriage.dependencies;
+package br.com.eterniaserver.eterniamarriage.configurations;
 
 import br.com.eterniaserver.eternialib.UUIDFetcher;
 import br.com.eterniaserver.eterniamarriage.EterniaMarriage;
-import br.com.eterniaserver.eterniamarriage.core.APIMarry;
-import br.com.eterniaserver.eterniamarriage.enums.Strings;
+import br.com.eterniaserver.eterniamarriage.core.Manager;
+import br.com.eterniaserver.eterniamarriage.core.enums.Strings;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 
 import org.bukkit.Bukkit;
@@ -16,9 +16,19 @@ import java.util.UUID;
 
 public class PlaceHolders extends PlaceholderExpansion {
 
-    private static final String VERSION_STRING = EterniaMarriage.class.getPackage().getImplementationVersion();
-    private static final String NINGUEM_STRING = "Ninguém";
-    private static final DecimalFormat df2 = new DecimalFormat(".##");
+    private final EterniaMarriage plugin;
+    private final String versionString;
+    private final String ninguemStr;
+    private final DecimalFormat df2;
+    private final Manager manager;
+
+    public PlaceHolders(final EterniaMarriage plugin, final Manager manager) {
+        this.plugin = plugin;
+        this.versionString = plugin.getClass().getPackage().getImplementationVersion();
+        this.ninguemStr = "Ninguém";
+        this.df2 = new DecimalFormat(".##");
+        this.manager = manager;
+    }
 
     @Override
     public boolean persist(){
@@ -45,7 +55,7 @@ public class PlaceHolders extends PlaceholderExpansion {
     @Override
     @Nonnull
     public String getVersion() {
-        return VERSION_STRING;
+        return versionString;
     }
 
     @Override
@@ -89,22 +99,22 @@ public class PlaceHolders extends PlaceholderExpansion {
                 return isCloseToPartner(uuid);
             // religionname
             case 1:
-                return APIMarry.getReligionName(uuid);
+                return manager.getReligionName(uuid);
             // partneruuid
             case 2:
-                return APIMarry.isMarried(uuid) ? String.valueOf(APIMarry.getPartnerUUID(uuid)) : NINGUEM_STRING;
+                return manager.isMarried(uuid) ? String.valueOf(plugin.marriedUsers.get(uuid).getMarryUUID()) : ninguemStr;
             // partnername
             case 3:
-                return APIMarry.isMarried(uuid) ? APIMarry.getPartnerName(uuid) : NINGUEM_STRING;
+                return manager.isMarried(uuid) ? manager.getPartnerName(uuid) : ninguemStr;
             // marryid
             case 4:
-                return APIMarry.isMarried(uuid) ? String.valueOf(APIMarry.getMarryId(uuid)) : "";
+                return manager.isMarried(uuid) ? String.valueOf(manager.getMarryId(uuid)) : "";
             // marrymoney
             case 5:
-                return APIMarry.isMarried(uuid) ? getMoney(uuid) : "";
+                return manager.isMarried(uuid) ? getMoney(uuid) : "";
             // partner
             case 6:
-                return APIMarry.isMarried(uuid) ? APIMarry.getPartnerDisplay(uuid) : NINGUEM_STRING;
+                return manager.isMarried(uuid) ? manager.getPartnerDisplay(uuid) : ninguemStr;
             // statusheart
             case 7:
                 return getStatusHeart(uuid);
@@ -124,32 +134,33 @@ public class PlaceHolders extends PlaceholderExpansion {
 
 
     public String getPriestStatus(UUID uuid) {
-        return Bukkit.getPlayer(uuid).hasPermission("eternia.priest") ? "&6" + APIMarry.getReligionPrefix(uuid) : "&7♰";
+        return Bukkit.getPlayer(uuid).hasPermission("eternia.priest") ? "&6" + manager.getReligionPrefix(uuid) : "&7" + plugin.getString(Strings.PLACEHOLDER_DEFAULT_RELIGION);
     }
 
     public String getPriest(UUID uuid) {
-        return Bukkit.getPlayer(uuid).hasPermission("eternia.priest") ? "&6" + APIMarry.getReligionPrefix(uuid) : "";
+        return Bukkit.getPlayer(uuid).hasPermission("eternia.priest") ? "&6" + manager.getReligionPrefix(uuid) : "";
     }
 
 
     private String isCloseToPartner(final UUID uuid) {
-        return isclose(uuid) ? EterniaMarriage.getString(Strings.PLACEHOLDER_CLOSE_TO_PARTNER) : "";
+        return isclose(uuid) ? plugin.getString(Strings.PLACEHOLDER_CLOSE_TO_PARTNER) : "";
     }
 
     private String isMarried(final UUID uuid) {
-        return APIMarry.isMarried(uuid) ? "&c" + EterniaMarriage.getString(Strings.PLACEHOLDER_PARTNER) : "";
+        return manager.isMarried(uuid) ? "&c" + plugin.getString(Strings.PLACEHOLDER_PARTNER) : "";
     }
 
     private String getStatusHeart(final UUID uuid) {
-        return APIMarry.isMarried(uuid) ? "&c" + EterniaMarriage.getString(Strings.PLACEHOLDER_PARTNER) : "&7" + EterniaMarriage.getString(Strings.PLACEHOLDER_PARTNER);
+        return manager.isMarried(uuid) ? "&c" + plugin.getString(Strings.PLACEHOLDER_PARTNER) : "&7" + plugin.getString(Strings.PLACEHOLDER_PARTNER);
     }
 
     private String getMoney(final UUID uuid) {
-        return df2.format(APIMarry.getMarryMoney(APIMarry.getMarryId(uuid)));
+        return df2.format(manager.getMarryMoney(manager.getMarryId(uuid)));
     }
 
     private boolean isclose(final UUID uuid) {
-        return APIMarry.isMarried(uuid) && APIMarry.isCloseToPartner(Bukkit.getOfflinePlayer(uuid));
+        return manager.isMarried(uuid) && manager.isCloseToPartner(Bukkit.getOfflinePlayer(uuid));
     }
+
 
 }
